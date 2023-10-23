@@ -1,0 +1,391 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+{% block content %}
+
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+
+  .btn_edit {
+    background-color: var(--primary_color);
+    color: white;
+  }
+
+  .person_icon {
+    font-size: 30px;
+    color: var(--primary_color);
+  }
+
+  /* Client Widgets  */
+  .card_container {
+    background-color: white;
+    border-radius: 15px;
+  }
+
+  .company_card {
+    background-color: var(--primary_color);
+    border-radius: 15px;
+  }
+
+  .circle {
+    width: 50px; /* Set the desired width and height for the circle */
+    height: 50px;
+    background-color: var(
+      --primary_color
+    ); /* Set the circle background color */
+    border-radius: 50%; /* Make it a circle by setting border-radius to 50% */
+    display: flex;
+    justify-content: center; /* Center the icon horizontally */
+    align-items: center; /* Center the icon vertically */
+    margin-right: 15px;
+  }
+
+  .icon_style {
+    font-size: 23px;
+    color: white;
+  }
+
+  .widget_heading {
+    font-size: 17px;
+    color: grey;
+  }
+
+  .search_container {
+    background-color: var(--background_color);
+    border: 0px;
+    border-bottom-left-radius: 15px;
+    border-top-left-radius: 15px;
+  }
+
+  .search_bar {
+    background-color: var(--background_color);
+    border: 0px;
+    border-bottom-right-radius: 15px;
+    border-top-right-radius: 15px;
+  }
+
+  .sort_filter {
+    background-color: var(--background_color);
+    border: 0px;
+    border-radius: 15px;
+  }
+
+  /* table style  */
+  .table_headings {
+    color: grey;
+    font-size: 18px;
+  }
+
+  .table_line {
+    color: lightgray;
+  }
+
+  .btn_action {
+    background-color: var(--primary_color);
+    color: white;
+    border-radius: 15px;
+  }
+
+  .table_action {
+    color: var(--primary_color);
+    font-size: 22px;
+  }
+
+  .new_invoice_btn {
+    background-color: var(--primary_color);
+    color: var(--background_color);
+    width: 100%;
+    border-radius: 15px;
+  }
+
+  .add_invoice_icon {
+    font-size: 22px;
+    margin-right: 20px;
+  }
+
+  /* Account Profile style  */
+  .account_label {
+    font-size: 14px;
+    color: grey;
+  }
+  .account_icon {
+    font-size: 22px;
+    color: var(--primary_color);
+    margin-right: 20px;
+  }
+
+  .company_icon {
+    font-size: 22px;
+    color: var(--background_color);
+    margin-right: 20px;
+  }
+
+  .account_colums {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Ensures all cards have the same height */
+  }
+
+  /* Account Actions  */
+  .btn_action {
+    background-color: var(--primary_color);
+    border-radius: 15px;
+    width: 100%;
+  }
+
+  .btn_edit_new {
+    border-color: var(--primary_color);
+    color: var(--primary_color);
+    border-radius: 15px;
+    width: 100%;
+  }
+
+  .btn_delete {
+    color: var(--primary_color);
+    border-radius: 15px;
+    width: 100%;
+  }
+
+  .status_btn {
+    border-radius: 15px;
+    width: 100%;
+  }
+
+  .ref_icon {
+    color: var(--background_color);
+    margin-right: 15px;
+    font-size: 20px;
+  }
+
+  .edit_icon {
+    margin-right: 15px;
+    font-size: 20px;
+  }
+
+  .delete_icon {
+    margin-right: 15px;
+    font-size: 20px;
+  }
+
+  .status_icon {
+    margin-right: 15px;
+    font-size: 20px;
+  }
+
+  .client_logo {
+    height: 200px;
+    width: 100%;
+    object-fit: contain;
+  }
+
+  /******** Tabs style start  ********/
+  /* Style the tab */
+  .tab {
+    overflow: hidden;
+  }
+
+  /* Style the buttons inside the tab */
+  .tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 17px;
+  }
+
+  /* Change background color of buttons on hover */
+  .tab button:hover {
+    background-color: #ddd;
+  }
+
+  /* Create an active/current tablink class */
+  .tab button.active {
+    background-color: var(--primary_color);
+    color: var(--background_color);
+  }
+
+  /* Style the tab content */
+  .tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+  }
+</style>
+
+<!-- ======= Account Actions  ======= -->
+<div class="row mb-5">
+  <div class="col-3 d-flex align-items-center">
+    <button class="btn btn_action py-2 shadow-sm">
+      <i class="bi bi-buildings-fill ref_icon"></i> {{client.company_name}}
+    </button>
+  </div>
+  <div class="col-3">
+    <button
+      type="button"
+      class="btn btn-outline-light btn_edit_new py-2 shadow-sm"
+    >
+      <i class="bi bi-gear-fill edit_icon"></i> Edit client
+    </button>
+  </div>
+  <div class="col-3">
+    <button
+      type="button"
+      class="btn btn-light btn_delete py-2 shadow-sm text-danger"
+    >
+      <i class="bi bi-trash3-fill delete_icon"></i> Delete client
+    </button>
+  </div>
+  <div class="col-3">
+    <button type="button" class="btn btn-success status_btn text-white">
+      <i class="bi bi-check-circle-fill status_icon"></i> Active
+    </button>
+  </div>
+</div>
+
+<!-- ======= Client Widgets ====== -->
+<div class="row mb-5">
+  <div class="col">
+    <div class="card_container shadow-sm d-flex align-items-center px-3 py-4">
+      <div class="circle">
+        <i class="bi bi-receipt icon_style"></i>
+      </div>
+      <div>
+        <h5 class="mb-1 widget_heading">Invoices</h5>
+        <h5 class="mb-0 fw-bold">{{invoicesCount}}</h5>
+      </div>
+    </div>
+  </div>
+  <!-- end col item  -->
+  <div class="col">
+    <div class="card_container shadow-sm d-flex align-items-center px-3 py-4">
+      <div class="circle">
+        <i class="bi bi-receipt icon_style"></i>
+      </div>
+      <div>
+        <h5 class="mb-1 widget_heading">Sales</h5>
+        <h5 class="mb-0 fw-bold">R{{salesIncome}}</h5>
+      </div>
+    </div>
+  </div>
+  <!-- end col item  -->
+  <div class="col">
+    <div class="card_container shadow-sm d-flex align-items-center px-3 py-4">
+      <div class="circle">
+        <i class="bi bi-receipt-cutoff icon_style"></i>
+      </div>
+      <div>
+        <h5 class="mb-1 widget_heading">Qoutations</h5>
+        <h5 class="mb-0 fw-bold">{{qoutesCount}}</h5>
+      </div>
+    </div>
+  </div>
+  <!-- end col item  -->
+  <div class="col">
+    <div class="card_container shadow-sm d-flex align-items-center px-3 py-4">
+      <div class="circle">
+        <i class="bi bi-bag-dash-fill icon_style"></i>
+      </div>
+      <div>
+        <h5 class="mb-1 widget_heading">Outstanding</h5>
+        <h5 class="mb-0 fw-bold">R{{balance}}</h5>
+      </div>
+    </div>
+  </div>
+  <!-- end col item  -->
+</div>
+
+<!-- ======= Profile Tabs ====== -->
+<div class="card_container shadow-sm px-3 py-4 mb-5 tab">
+  <div class="row">
+    <div class="col hover_style">
+      <button
+        class="tablinks btn"
+        onclick="openCustomerLinks(event, 'invoices')"
+        id="defaultOpen"
+      >
+        <h6 class="mb-0">Invoices</h6>
+      </button>
+    </div>
+    <div class="col hover_style">
+      <button class="tablinks btn" onclick="openCustomerLinks(event, 'sales')">
+        <h6 class="mb-0">Sales</h6>
+      </button>
+    </div>
+    <div class="col hover_style">
+      <button class="tablinks btn" onclick="openCustomerLinks(event, 'qoutes')">
+        <h6 class="mb-0">Qoutes</h6>
+      </button>
+    </div>
+    <div class="col hover_style">
+      <button class="btn">
+        <h6 class="mb-0">Receipts</h6>
+      </button>
+    </div>
+    <div class="col hover_style">
+      <button class="btn">
+        <h6 class="mb-0">Credit Notes</h6>
+      </button>
+    </div>
+    <div class="col hover_style">
+      <button class="btn">
+        <h6 class="mb-0">Supplier Invoice</h6>
+      </button>
+    </div>
+    <div class="col hover_style">
+      <button
+        class="tablinks btn"
+        onclick="openCustomerLinks(event, 'profile')"
+      >
+        <h6 class="mb-0">Client Profile</h6>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ======= customer invoices  ======= -->
+<div id="invoices" class="tabcontent p-0" style="border: none">
+  {% include 'partials/customerInvoices.html' %}
+</div>
+
+<!-- ======= customer sales  ======= -->
+<div id="sales" class="tabcontent p-0" style="border: none">
+  {% include 'partials/customerSales.html' %}
+</div>
+
+<!-- ======= customer qoutes  ======= -->
+<div id="qoutes" class="tabcontent p-0" style="border: none">
+  {% include 'partials/customerQoutes.html' %}
+</div>
+
+<!-- ======= customer profile  ======= -->
+<div id="profile" class="tabcontent p-0" style="border: none">
+  {% include 'partials/customerProfile.html' %}
+</div>
+
+<script>
+  function openCustomerLinks(evt, cityName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+  }
+
+  // Get the element with id="defaultOpen" and click on it
+  document.getElementById("defaultOpen").click();
+</script>
+
+{% endblock %}

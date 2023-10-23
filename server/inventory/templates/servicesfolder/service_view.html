@@ -1,0 +1,284 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+{% block content %}
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+
+  .card_container {
+    background-color: white;
+    border-radius: 15px;
+  }
+
+  .account_label {
+    font-size: 14px;
+    color: grey;
+  }
+  .account_icon {
+    font-size: 22px;
+    color: var(--primary_color);
+    margin-right: 20px;
+  }
+
+  .stock_icon {
+    color: #b91d47 !important;
+  }
+
+  .sold_icon {
+    color: #1e7145 !important;
+  }
+</style>
+
+<!-- ======= Messages Notification  ======= -->
+<div>
+  {% for message in messages %}
+  <div class="alert alert-success my-5" role="alert">{{message}}</div>
+  {% endfor %}
+</div>
+
+<div class="row mb-5">
+  <div class="col">
+    <div class="card_container shadow-sm px-3 py-4 col_sizes">
+      <h5 class="fw-bold mb-3">
+        <span class="text-secondary">Service :</span> {{service.name}}
+      </h5>
+      <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-gear account_icon"></i>
+        <div>
+          <p class="account_label mb-0">Service Referrance</p>
+          <p class="mb-0 fw-bold">#{{service.ref}}</p>
+        </div>
+      </div>
+      <!-- end profile item  -->
+      <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-gear account_icon"></i>
+        <div>
+          <p class="account_label mb-0">Name</p>
+          <p class="mb-0 fw-bold">{{service.name}}</p>
+        </div>
+      </div>
+      <!-- end profile item  -->
+      <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-gear account_icon"></i>
+        <div>
+          <p class="account_label mb-0">Description</p>
+          <p class="mb-0 fw-bold">{{service.description}}</p>
+        </div>
+      </div>
+      <!-- end profile item  -->
+      <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-gear account_icon"></i>
+        <div>
+          <p class="account_label mb-0">Service Fee</p>
+          <p class="mb-0 fw-bold">R{{service.serviceFee}}</p>
+        </div>
+      </div>
+      <!-- end profile item  -->
+      <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-gear account_icon"></i>
+        <div>
+          <p class="account_label mb-0">Category</p>
+          <p class="mb-0 fw-bold">{{service.category.name}}</p>
+        </div>
+      </div>
+      <!-- end profile item  -->
+      <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-calendar-check account_icon"></i>
+        <div>
+          <p class="account_label mb-0">Date Created</p>
+          <p class="mb-0 fw-bold">{{service.date_created|date:"l d M Y"}}</p>
+        </div>
+      </div>
+      <!-- end profile item  -->
+    </div>
+  </div>
+
+  <div class="col-5">
+    <div class="card_container shadow-sm px-3 py-4 col_sizes">
+      <h5 class="fw-bold mb-3">Sales</h5>
+      <canvas id="myChart" style="width: 100%; max-width: 600px"></canvas>
+      <div class="mt-5">
+        <h5 class="fw-bold">Service Income</h5>
+        <div class="row mb-3">
+          <div class="col">
+            <p class="mb-0">Income</p>
+          </div>
+          <div class="col">
+            <p class="mb-0 fw-bold">R{{income}}</p>
+          </div>
+        </div>
+        <!-- end item  -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Service Transactions  -->
+<div class="card_container shadow-sm px-3 py-4 mb-5">
+  <div class="row mb-5 d-flex align-items-center">
+    <div class="col">
+      <h5 class="fw-bold">All Transactions</h5>
+    </div>
+    <div class="col">
+      <div class="row">
+        <div class="col">
+          <button
+            class="btn new_invoice_btn py-2 shadow-sm fw-bold"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#serviceTransaction{{service.id}}"
+            aria-controls="offcanvasExample"
+          >
+            <i class="bi bi-plus-circle-fill add_invoice_icon"></i> Create
+            Transaction
+          </button>
+        </div>
+        <div class="col">
+          <button
+            type="button"
+            class="btn btn-outline-dark category_btn_add"
+            data-bs-toggle="modal"
+            data-bs-target="#categoryModal"
+          >
+            <i class="bi bi-bookmarks-fill add_invoice_icon"></i>
+            Categories
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if documents %}
+  <div class="row mb-4">
+    <div class="col-3">
+      <div class="input-group mb-3 search_main_container">
+        <span class="input-group-text search_container" id="basic-addon1"
+          ><i class="bi bi-search text-secondary"></i
+        ></span>
+        <input
+          type="text"
+          class="form-control search_bar"
+          placeholder="Inventory No."
+          aria-label="Invoice Number"
+          aria-describedby="basic-addon1"
+        />
+      </div>
+    </div>
+    <!-- end search item  -->
+    <div class="col-3">
+      <select
+        class="form-select sort_filter"
+        aria-label="Default select example"
+      >
+        <option selected>Sort By</option>
+        <option value="1">One</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- ======= table row start  ====== -->
+  <div class="row mb-4">
+    <div class="col">
+      <p class="mb-0 table_headings">Transction No.</p>
+    </div>
+    <div class="col">
+      <p class="mb-0 table_headings">Transction Method</p>
+    </div>
+    <div class="col">
+      <p class="mb-0 table_headings">Quantity</p>
+    </div>
+    <div class="col">
+      <p class="mb-0 table_headings">Income</p>
+    </div>
+    <div class="col">
+      <p class="mb-0 table_headings">Date</p>
+    </div>
+    <div class="col">
+      <center>
+        <p class="mb-0 table_headings">Actions</p>
+      </center>
+    </div>
+  </div>
+  <hr class="table_line" />
+  <!-- end headings  -->
+
+  {% for data in documents %}
+  <div class="row mb-3 d-flex align-items-center">
+    <div class="col">
+      <p class="mb-0">#{{data.service.ref}}</p>
+    </div>
+    <div class="col">
+      <p class="mb-0">{{data.method}}</p>
+    </div>
+    <div class="col">
+      <p class="mb-0">{{data.documentQuantity}}</p>
+    </div>
+    <div class="col">
+      <p class="mb-0">R{{data.documentTotal}}</p>
+    </div>
+    <div class="col">
+      <p class="mb-0">{{data.date_created|date:"l d M Y"}}</p>
+    </div>
+    <div class="col">
+      <center>
+        <a href="{% url 'transaction-success' data.id %}">
+          <button class="btn btn_action">view</button>
+        </a>
+      </center>
+    </div>
+  </div>
+  <hr class="table_line" />
+  {% endfor %}
+  <!-- end table row  -->
+  {% else %}
+  <h6>
+    <i class="bi bi-arrow-right-circle-fill empty_object_icon"></i>There is
+    currently no transactions for this item
+  </h6>
+  {% endif %}
+</div>
+
+<!-- ======= create item transaction offcanvas  ======= -->
+{% include 'partials/service_transactions.html' %}
+
+<script>
+  // Parse the JSON data passed from Django
+  const barChart = JSON.parse("{{ barChart_json|escapejs }}");
+
+  // Initialize empty arrays for xValues and yValues
+  const xValues = [];
+  const yValues = [];
+
+  // Loop through the barChart data to populate xValues, yValues, and barColors
+  barChart.forEach((data) => {
+    xValues.push(data.month);
+    yValues.push(data.total);
+  });
+
+  new Chart("myChart", {
+    type: "bar",
+    data: {
+      labels: xValues,
+      datasets: [
+        {
+          backgroundColor: "#6470ef",
+          data: yValues,
+        },
+      ],
+    },
+    options: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: "sales chart",
+      },
+    },
+  });
+</script>
+
+{% endblock %}

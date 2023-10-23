@@ -1,0 +1,526 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+{% block content %}
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+
+  .company_logo {
+    height: 200px;
+    width: 100%;
+    object-fit: contain;
+  }
+</style>
+
+<!-- ======= Messages Notification  ======= -->
+<div>
+  {% for message in messages %}
+  <div class="alert alert-success my-5" role="alert">{{message}}</div>
+  {% endfor %}
+</div>
+
+<div class="row">
+  <!-- ======= Company info  ======= -->
+  <div class="col-4 mb-4">
+    <div class="card_container shadow-sm px-3 py-4 col_sizes">
+      <div class="row d-flex align-items-center mb-4">
+        <div class="col">
+          <h5 class="mb-0">Company Information</h5>
+        </div>
+        <div class="col-3">
+          <button
+            class="btn btn_action"
+            data-bs-toggle="modal"
+            data-bs-target="#inforModal"
+          >
+            <i class="bi bi-gear-fill"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col">
+          <p class="mb-0 text-secondary">Company Name</p>
+        </div>
+        <div class="col">
+          <p class="mb-0">{{company.companyInfo.name}}</p>
+        </div>
+      </div>
+      <!-- end item  -->
+      <div class="row mb-3">
+        <div class="col">
+          <p class="mb-0 text-secondary">Phone</p>
+        </div>
+        <div class="col">
+          <p class="mb-0">{{company.companyInfo.phone}}</p>
+        </div>
+      </div>
+      <!-- end item  -->
+      <div class="row mb-3">
+        <div class="col">
+          <p class="mb-0 text-secondary">Email</p>
+        </div>
+        <div class="col">
+          <p class="mb-0">{{company.companyInfo.email}}</p>
+        </div>
+      </div>
+      <!-- end item  -->
+      <div class="row mb-3">
+        <div class="col">
+          <p class="mb-0 text-secondary">Business #</p>
+        </div>
+        <div class="col">
+          <p class="mb-0">{{company.companyInfo.registration}}</p>
+        </div>
+      </div>
+      <!-- end item  -->
+    </div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div
+    class="modal fade"
+    id="inforModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+            Company Information
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+            {% csrf_token%}
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                class="form-control"
+                id="floatingInput"
+                placeholder="Company Name"
+                name="companyName"
+                value="{{company.companyInfo.name}}"
+              />
+              <label for="floatingInput">Company Name</label>
+            </div>
+            <!-- end input item  -->
+            <div class="form-floating mb-3">
+              <input
+                type="number"
+                class="form-control"
+                id="floatingInput"
+                placeholder="Company Phone"
+                name="companyPhone"
+                value="{{company.companyInfo.phone}}"
+              />
+              <label for="floatingInput">Phone</label>
+            </div>
+            <!-- end input item   -->
+            <div class="form-floating mb-3">
+              <input
+                type="email"
+                class="form-control"
+                id="floatingInput"
+                placeholder="Email"
+                name="email"
+                value="{{company.companyInfo.email}}"
+              />
+              <label for="floatingInput">Email</label>
+            </div>
+            <!-- end input item  -->
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                class="form-control"
+                id="floatingInput"
+                placeholder="Business Registration #"
+                name="registration"
+                value="{{company.companyInfo.registration}}"
+              />
+              <label for="floatingInput">Registration #</label>
+            </div>
+            <!-- end input item  -->
+            <center>
+              <button
+                type="submit"
+                name="submit_company"
+                class="btn btn_submit my-5 py-3"
+              >
+                Submit Company
+              </button>
+            </center>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= Company Address  ======= -->
+  <div class="col-4 mb-4">
+    <div class="card_container shadow-sm px-3 py-4 col_sizes">
+      <div class="row d-flex align-items-center mb-4">
+        <div class="col">
+          <h5 class="mb-0">Company Address</h5>
+        </div>
+        <div class="col-3">
+          <button
+            class="btn btn_action"
+            data-bs-toggle="modal"
+            data-bs-target="#AddressModal"
+          >
+            <i class="bi bi-gear-fill"></i>
+          </button>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <p class="mb-0 text-secondary">Street</p>
+        </div>
+        <div class="col">
+          <p class="mb-0">{{company.address.street}}</p>
+        </div>
+      </div>
+      <!-- end item  -->
+      <div class="row mb-3">
+        <div class="col">
+          <p class="mb-0 text-secondary">Suburb</p>
+        </div>
+        <div class="col">
+          <p class="mb-0">{{company.address.suburb}}</p>
+        </div>
+      </div>
+      <!-- end item  -->
+      <div class="row mb-3">
+        <div class="col">
+          <p class="mb-0 text-secondary">City</p>
+        </div>
+        <div class="col">
+          <p class="mb-0">{{company.address.city}}</p>
+        </div>
+      </div>
+      <!-- end item  -->
+      <div class="row mb-3">
+        <div class="col">
+          <p class="mb-0 text-secondary">Province</p>
+        </div>
+        <div class="col">
+          <p class="mb-0">{{company.address.province}}</p>
+        </div>
+      </div>
+      <!-- end item  -->
+      <div class="row mb-3">
+        <div class="col">
+          <p class="mb-0 text-secondary">PO BOX</p>
+        </div>
+        <div class="col">
+          <p class="mb-0">{{company.address.pobox}}</p>
+        </div>
+      </div>
+      <!-- end item  -->
+    </div>
+  </div>
+
+  <!-- Address Modal -->
+  <div
+    class="modal fade"
+    id="AddressModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Company Address</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+            {% csrf_token%}
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                class="form-control"
+                id="floatingInput"
+                placeholder="Street"
+                name="street"
+                value="{{company.address.street}}"
+              />
+              <label for="floatingInput">Street</label>
+            </div>
+            <!-- end input item  -->
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                class="form-control"
+                id="floatingInput"
+                placeholder="Suburb"
+                name="suburb"
+                value="{{company.address.suburb}}"
+              />
+              <label for="floatingInput">Suburb</label>
+            </div>
+            <!-- end input item   -->
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                class="form-control"
+                id="floatingInput"
+                placeholder="City"
+                name="city"
+                value="{{company.address.city}}"
+              />
+              <label for="floatingInput">City</label>
+            </div>
+            <!-- end input item  -->
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                class="form-control"
+                id="floatingInput"
+                placeholder="Province"
+                name="province"
+                value="{{company.address.province}}"
+              />
+              <label for="floatingInput">Province</label>
+            </div>
+            <!-- end input item  -->
+            <div class="form-floating mb-3">
+              <input
+                type="text"
+                class="form-control"
+                id="floatingInput"
+                placeholder="PO BOX"
+                name="pobox"
+                value="{{company.address.pobox}}"
+              />
+              <label for="floatingInput">PO BOX</label>
+            </div>
+            <!-- end input item  -->
+            <center>
+              <button
+                type="submit"
+                name="submit_address"
+                class="btn btn_submit my-5 py-3"
+              >
+                Submit Address
+              </button>
+            </center>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= Company Logo  ======= -->
+  <div class="col-4 mb-4">
+    <div class="card_container shadow-sm px-3 py-4 col_sizes">
+      <div class="row d-flex align-items-center mb-4">
+        <div class="col">
+          <h5 class="mb-0">Company Logo</h5>
+        </div>
+        <div class="col-3">
+          <button
+            class="btn btn_action"
+            data-bs-toggle="modal"
+            data-bs-target="#companylogo"
+          >
+            <i class="bi bi-gear-fill"></i>
+          </button>
+        </div>
+      </div>
+      <center>
+        <img src="{{company.logo.url}}" alt="" class="company_logo" />
+      </center>
+    </div>
+  </div>
+
+  <!--Company Logo Modal -->
+  <div
+    class="modal fade"
+    id="companylogo"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Company Logo</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body py-5">
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+              <input
+                type="file"
+                class="form-control"
+                id="inputGroupFile02"
+                name="companylogo"
+              />
+              <label class="input-group-text" for="inputGroupFile02"
+                >Upload</label
+              >
+            </div>
+            <center>
+              <button
+                type="submit"
+                name="submit_logo"
+                class="btn btn_submit my-5 py-3"
+              >
+                Submit Logo
+              </button>
+            </center>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= Banking Details  ======= -->
+  <div class="col-4 mb-4">
+    <div class="card_container shadow-sm px-3 py-4 col_sizes">
+      <div class="row d-flex align-items-center mb-4">
+        <div class="col">
+          <h5 class="mb-0">Bank Details</h5>
+        </div>
+        <div class="col-3">
+          <button
+            class="btn btn_action"
+            data-bs-toggle="modal"
+            data-bs-target="#bankModal"
+          >
+            <i class="bi bi-gear-fill"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col">
+          <p class="mb-0 text-secondary">Bank</p>
+        </div>
+        <div class="col">
+          <p class="mb-0">{{company.bank.bankName}}</p>
+        </div>
+      </div>
+      <!-- end item  -->
+      <div class="row mb-3">
+        <div class="col">
+          <p class="mb-0 text-secondary">Branch Code</p>
+        </div>
+        <div class="col">
+          <p class="mb-0">{{company.bank.branch}}</p>
+        </div>
+      </div>
+      <!-- end item  -->
+      <div class="row mb-3">
+        <div class="col">
+          <p class="mb-0 text-secondary">Account Number</p>
+        </div>
+        <div class="col">
+          <p class="mb-0">{{company.bank.account}}</p>
+        </div>
+      </div>
+      <!-- end item  -->
+    </div>
+  </div>
+</div>
+
+<!-- Banking details modal -->
+<div
+  class="modal fade"
+  id="bankModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Banking Details</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form method="POST">
+          {% csrf_token%}
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="floatingInput"
+              placeholder="Bank"
+              name="bank"
+              value="{{company.bank.bankName}}"
+            />
+            <label for="floatingInput">Bank</label>
+          </div>
+          <!-- end input item  -->
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="floatingInput"
+              placeholder="Branch Code"
+              name="branch"
+              value="{{company.bank.branch}}"
+            />
+            <label for="floatingInput">Branch Code</label>
+          </div>
+          <!-- end input item   -->
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="floatingInput"
+              placeholder="Account number"
+              name="account"
+              value="{{company.bank.account}}"
+            />
+            <label for="floatingInput">Account number</label>
+          </div>
+          <!-- end input item  -->
+          <center>
+            <button
+              type="submit"
+              name="submit_bank"
+              class="btn btn_submit my-5 py-3"
+            >
+              Submit Address
+            </button>
+          </center>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

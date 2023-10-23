@@ -1,0 +1,305 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+{% block content %}
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+
+  .item_name {
+    color: var(--primary_color);
+  }
+</style>
+
+<form method="POST">
+  {% csrf_token %}
+
+  <div class="row">
+    <div class="col">
+      <div class="card_container shadow-sm px-3 py-4 col_sizes">
+        <h5 class="fw-bold mb-3">
+          <span class="item_name">{{item.name}}</span> Sale Request
+        </h5>
+        <div class="form-floating mb-3">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            value="{{item.sellingprice}}"
+            readonly
+          />
+          <label for="floatingInput">Item Price</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            placeholder="Sale reference"
+            value="{{ref}}"
+            name="reference"
+          />
+          <label for="floatingInput">Sale reference</label>
+        </div>
+        <select
+          class="form-select select_padding"
+          aria-label="Default select example"
+          name="customerID"
+        >
+          <option selected value="none">Select Customer</option>
+          {% for data in customers %}
+          <option value="{{data.id}}">{{data.firstName}}</option>
+          {% endfor %}
+        </select>
+        <div id="customer select" class="form-text mb-3">Optional</div>
+        <!-- end input item  -->
+        <div class="form-floating">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            placeholder="Discount %"
+            name="discount"
+            value="0"
+          />
+          <label for="floatingInput">Discount %</label>
+        </div>
+        <div id="discount example" class="form-text mb-4">
+          Example : 10 or 15.5
+        </div>
+        <!-- end input item  -->
+        <div class="row mb-3">
+          <div class="col d-flex justify-content-start">
+            <label for="quantity sale" class="form-label">Quantity</label>
+          </div>
+          <div class="col d-flex justify-content-end">
+            {% if item.quantity > item.restocklevel %}
+            <h6>
+              <span class="badge bg-success">{{item.quantity}}</span> in Stock
+            </h6>
+            {% else %}
+            <h6>
+              <span class="badge bg-danger">{{item.quantity}}</span> low stock
+              alert
+            </h6>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="row mb-5">
+          <div class="col">
+            <button type="button" class="btn btn_fill" onclick="singleSale()">
+              Single Sale
+            </button>
+          </div>
+          <div class="col">
+            <button
+              type="button"
+              class="btn btn-outline-dark outline_btn"
+              onclick="bulkSale()"
+            >
+              Bulk Sale
+            </button>
+          </div>
+        </div>
+
+        <div id="singleqty">
+          <div class="form-floating mb-4">
+            <input
+              type="number"
+              class="form-control"
+              id="floatingInput"
+              placeholder="Quantity"
+              name="Quantity"
+            />
+            <label for="floatingInput">Quantity</label>
+          </div>
+          <div id="passwordHelpBlock" class="form-text mt-4">
+            Use this for entering individual item quantities
+          </div>
+        </div>
+
+        <!-- bulk quantity  -->
+        <div id="bulkQty" style="display: none">
+          <div class="form-floating mb-4">
+            <input
+              type="number"
+              class="form-control mb-3"
+              id="floatingInput"
+              placeholder="Quantity in one box"
+              name="bulkQuantity"
+            />
+            <label for="floatingInput">Quantity in one box</label>
+          </div>
+          <div class="form-floating mb-4">
+            <input
+              type="number"
+              class="form-control mb-3"
+              id="floatingInput"
+              placeholder="How many boxs"
+              name="boxQty"
+            />
+            <label for="floatingInput">How many boxs</label>
+          </div>
+
+          <div id="passwordHelpBlock" class="form-text mt-4">
+            Use for counting items in containers, simplifying bulk inventory
+            management.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card_container shadow-sm px-3 py-4 col_sizes">
+        <h5 class="fw-bold mb-3">
+          Address :
+          <span class="text-secondary" style="font-size: 14px">Optional</span>
+        </h5>
+
+        <div class="form-check form-switch mb-4">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="flexSwitchCheckDefault"
+          />
+          <label class="form-check-label" for="flexSwitchCheckDefault"
+            ><i class="bi bi-arrow-left px-2"></i> switch button to attact
+            address to customer</label
+          >
+        </div>
+        <!-- Address Value input  -->
+        <input
+          type="text"
+          name="addressValue"
+          id="addressInput"
+          value="No"
+          hidden="true"
+        />
+        <!-- Address Value  -->
+        <div id="addressDiv" style="display: none">
+          <!-- Content to be shown/hidden -->
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="floatingInput"
+              name="fullName"
+              placeholder="Full Name"
+            />
+            <label for="floatingInput">Full Name</label>
+          </div>
+          <!-- end input item  -->
+          <div class="form-floating mb-3">
+            <input
+              type="number"
+              class="form-control"
+              id="floatingInput"
+              name="PhoneNumber"
+              placeholder="Phone Number"
+            />
+            <label for="floatingInput">Phone Number</label>
+          </div>
+          <!-- end input item  -->
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="floatingInput"
+              name="street"
+              placeholder="Street Address"
+            />
+            <label for="floatingInput">Street Address</label>
+          </div>
+          <!-- end input item  -->
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="floatingInput"
+              name="Suburb"
+              placeholder="Suburb"
+            />
+            <label for="floatingInput">Suburb</label>
+          </div>
+          <!-- end input item  -->
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="floatingInput"
+              name="city"
+              placeholder="City"
+            />
+            <label for="floatingInput">City</label>
+          </div>
+          <!-- end input item  -->
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="floatingInput"
+              name="province"
+              placeholder="Province"
+            />
+            <label for="floatingInput">Province</label>
+          </div>
+          <!-- end input item  -->
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="floatingInput"
+              name="pobox"
+              placeholder="Po.box"
+            />
+            <label for="floatingInput">Po.box</label>
+          </div>
+          <!-- end input item  -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sale type input  -->
+  <input type="text" name="qty_type" id="qty" value="single" hidden="true" />
+
+  <center>
+    <button class="btn btn_submit py-3 my-5" type="submit" name="submit_sale">
+      Submit Sale
+    </button>
+  </center>
+</form>
+
+<script>
+  function singleSale() {
+    document.getElementById("singleqty").style.display = "block";
+    document.getElementById("bulkQty").style.display = "none";
+    document.getElementById("qty").value = "single";
+  }
+
+  function bulkSale() {
+    document.getElementById("singleqty").style.display = "none";
+    document.getElementById("bulkQty").style.display = "block";
+    document.getElementById("qty").value = "bulk";
+  }
+
+  //   show and hide address model
+  const toggleSwitch = document.getElementById("flexSwitchCheckDefault");
+  const targetDiv = document.getElementById("addressDiv");
+
+  toggleSwitch.addEventListener("change", function () {
+    if (this.checked) {
+      targetDiv.style.display = "block"; // Show the div when the checkbox is checked
+      document.getElementById("addressInput").value = "Yes";
+    } else {
+      targetDiv.style.display = "none"; // Hide the div when the checkbox is unchecked
+      document.getElementById("addressInput").value = "No";
+    }
+  });
+</script>
+
+{% endblock %}

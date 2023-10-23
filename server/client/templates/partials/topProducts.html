@@ -1,0 +1,43 @@
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+</style>
+
+<div class="card_container shadow-sm px-3 py-4 col_sizes">
+  <h5 class="fw-bold mb-1">Overview</h5>
+  <p class="text-secondary mb-3">Top Products</p>
+
+  <div id="myPlot" style="width: 100%; max-width: 100%"></div>
+</div>
+
+<script>
+  const products = JSON.parse("{{ top_products|escapejs }}");
+  const xArray = [];
+  const yArray = [];
+
+  // loop through the products data
+  products.forEach((data) => {
+    xArray.push(data.percentage);
+    yArray.push(data.name + " " + data.percentage + "%" + " ");
+  });
+
+  const data = [
+    {
+      x: xArray,
+      y: yArray,
+      type: "bar",
+      orientation: "h",
+      marker: { color: "#6470ef" },
+    },
+  ];
+
+  const layout = {
+    title: "",
+    xaxis: { title: "Percentage" }, // Add a label to the x-axis for clarity
+    yaxis: { automargin: true }, // Rotate y-axis labels
+  };
+
+  Plotly.newPlot("myPlot", data, layout);
+</script>

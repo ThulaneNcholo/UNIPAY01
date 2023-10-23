@@ -1,0 +1,231 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+{% block content %}
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+
+  .main_component {
+    background-color: white;
+  }
+
+  .page_title {
+    color: grey;
+  }
+
+  .btn_add_customer {
+    background-color: var(--primary_color);
+    color: white;
+    width: 70%;
+  }
+</style>
+
+<div class="main_component rounded container py-4">
+  <h4 class="page_title mb-4">Add Employee</h4>
+
+  <form method="POST" autocomplete="off" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="row">
+      <div class="col">
+        <h5 class="mb-4 fw-bold">Personal Information</h5>
+        <div class="form-floating mb-3">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            name="FirstName"
+            placeholder="First Name"
+          />
+          <label for="floatingInput">First Name</label>
+        </div>
+        <!-- end input item  -->
+        <div class="form-floating mb-3">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            name="lastName"
+            placeholder="Last Name"
+          />
+          <label for="floatingInput">Last Name</label>
+        </div>
+        <!-- end input item  -->
+        <div class="form-floating mb-3">
+          <input
+            type="email"
+            class="form-control"
+            id="floatingInput"
+            name="email"
+            placeholder="name@example.com"
+          />
+          <label for="floatingInput">Email address</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input
+            type="number"
+            class="form-control"
+            id="floatingInput"
+            name="PhoneNumber"
+            placeholder="Phone Number"
+          />
+          <label for="floatingInput">Phone Number</label>
+        </div>
+        <!-- end input item  -->
+        <div class="mb-3">
+          <label for="profile picture" class="form-label"
+            >Profile Picture</label
+          >
+          <input
+            type="file"
+            class="form-control"
+            id="profile picture"
+            name="profilepic"
+            aria-describedby="profile picture"
+          />
+        </div>
+      </div>
+      <div class="col">
+        <h5 class="mb-4 fw-bold">Bank Information</h5>
+        <div class="form-floating mb-3">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            name="bankName"
+            placeholder="Bank Name"
+          />
+          <label for="floatingInput">Bank Name</label>
+        </div>
+        <!-- end input item  -->
+        <div class="form-floating mb-3">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            name="branch"
+            placeholder="Branch Coder"
+          />
+          <label for="floatingInput">Branch Code</label>
+        </div>
+        <!-- end input item  -->
+        <div class="form-floating mb-4">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            name="account"
+            placeholder="Account Number"
+          />
+          <label for="floatingInput">Account Number</label>
+        </div>
+        <!-- end input item  -->
+        <div class="row">
+          <div class="col">
+            <div class="mb-3">
+              <label for="paydate" class="form-label">Pay day</label>
+              <input
+                type="number"
+                class="form-control select_padding"
+                id="paydate"
+                name="paydate"
+                placeholder="25"
+                aria-describedby="Pay day"
+              />
+            </div>
+          </div>
+          <div class="col">
+            <div class="mb-3">
+              <label for="paydate" class="form-label">Salary Amount</label>
+              <input
+                type="text"
+                class="form-control select_padding"
+                id="salary"
+                name="salary"
+                placeholder="7500"
+                aria-describedby="Salary Amount"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- end input item  -->
+      </div>
+      <div class="col-12">
+        <h5 class="my-4 fw-bold">Address</h5>
+
+        <div class="form-floating mb-3">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            name="street"
+            placeholder="Street Address"
+          />
+          <label for="floatingInput">Street Address</label>
+        </div>
+        <!-- end input item  -->
+        <div class="form-floating mb-3">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            name="Suburb"
+            placeholder="Suburb"
+          />
+          <label for="floatingInput">Suburb</label>
+        </div>
+        <!-- end input item  -->
+        <div class="form-floating mb-3">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            name="city"
+            placeholder="City"
+          />
+          <label for="floatingInput">City</label>
+        </div>
+        <!-- end input item  -->
+        <div class="form-floating mb-3">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            name="province"
+            placeholder="Province"
+          />
+          <label for="floatingInput">Province</label>
+        </div>
+        <!-- end input item  -->
+        <div class="form-floating mb-3">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            name="pobox"
+            placeholder="Po.box"
+          />
+          <label for="floatingInput">Po.box</label>
+        </div>
+        <!-- end input item  -->
+      </div>
+    </div>
+
+    <center>
+      <button
+        class="btn btn_add_customer mt-5 py-3"
+        type="submit"
+        name="submit_empoyee"
+      >
+        Submit Client
+      </button>
+    </center>
+  </form>
+</div>
+
+{% endblock %}

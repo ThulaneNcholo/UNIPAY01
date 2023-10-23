@@ -1,0 +1,210 @@
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+
+  .profile_image {
+    vertical-align: middle;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .employee_actions_btn {
+    width: 50%;
+  }
+
+  .hr_style {
+    color: lightgray;
+  }
+
+  .edit_icon {
+    font-size: 25px;
+    color: var(--primary_color);
+  }
+
+  .edit_icon:hover {
+    cursor: pointer;
+    color: black;
+  }
+</style>
+
+<div
+  class="offcanvas offcanvas-start"
+  tabindex="-1"
+  id="employeeOffcanvas{{data.id}}"
+  aria-labelledby="offcanvasExampleLabel"
+>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasExampleLabel">
+      <i class="bi bi-gear-fill d-flex justify-content-end mb-4 edit_icon"></i>
+    </h5>
+    <button
+      type="button"
+      class="btn-close text-reset"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body pb-5">
+    <center>
+      <img
+        src="{{data.profile_image.url}}"
+        alt="Avatar"
+        class="profile_image mb-4"
+      />
+      <h4 class="mb-4">{{data.firstName}} {{data.lastName}}</h4>
+      <div class="d-flex justify-content-center mb-5">
+        <button class="btn btn-dark employee_actions_btn mx-1">Email</button>
+        <button class="btn btn-dark employee_actions_btn mx-1">Call</button>
+      </div>
+    </center>
+
+    <div class="row">
+      <div class="col">
+        <p class="mb-0">ID</p>
+      </div>
+      <div class="col d-flex justify-content-end">
+        <p class="mb-0">{{data.ref}}</p>
+      </div>
+    </div>
+    <hr class="mb-3 hr_style" />
+    <!-- end item  -->
+    <div class="row">
+      <div class="col">
+        <p class="mb-0">Phone</p>
+      </div>
+      <div class="col d-flex justify-content-end">
+        <p class="mb-0">{{data.phone}}</p>
+      </div>
+    </div>
+    <hr class="mb-3 hr_style" />
+    <!-- end item  -->
+    <div class="row">
+      <div class="col">
+        <p class="mb-0">Email</p>
+      </div>
+      <div class="col d-flex justify-content-end">
+        <p class="mb-0">{{data.email}}</p>
+      </div>
+    </div>
+    <hr class="mb-3 hr_style" />
+    <!-- end item  -->
+    <div class="row">
+      <div class="col">
+        <p class="mb-0">Status</p>
+      </div>
+      <div class="col d-flex justify-content-end">
+        <p class="mb-0 badge bg-success">{{data.status}}</p>
+      </div>
+    </div>
+    <hr class="mb-5 hr_style" />
+    <!-- end item  -->
+
+    <h5 class="fw-bold mb-3">Address</h5>
+    <div class="row">
+      <div class="col">
+        <p class="mb-0">Street</p>
+      </div>
+      <div class="col d-flex justify-content-end">
+        <p class="mb-0">{{data.address.street}}</p>
+      </div>
+    </div>
+    <hr class="mb-3 hr_style" />
+    <!-- end item  -->
+    <div class="row">
+      <div class="col">
+        <p class="mb-0">Suburb</p>
+      </div>
+      <div class="col d-flex justify-content-end">
+        <p class="mb-0">{{data.address.suburb}}</p>
+      </div>
+    </div>
+    <hr class="mb-3 hr_style" />
+    <!-- end item  -->
+    <div class="row">
+      <div class="col">
+        <p class="mb-0">City</p>
+      </div>
+      <div class="col d-flex justify-content-end">
+        <p class="mb-0">{{data.address.city}}</p>
+      </div>
+    </div>
+    <hr class="mb-3 hr_style" />
+    <!-- end item  -->
+    <div class="row">
+      <div class="col">
+        <p class="mb-0">Province</p>
+      </div>
+      <div class="col d-flex justify-content-end">
+        <p class="mb-0">{{data.address.province}}</p>
+      </div>
+    </div>
+    <hr class="mb-3 hr_style" />
+    <!-- end item  -->
+    <div class="row">
+      <div class="col">
+        <p class="mb-0">PO BOX</p>
+      </div>
+      <div class="col d-flex justify-content-end">
+        <p class="mb-0">{{data.address.pobox}}</p>
+      </div>
+    </div>
+    <hr class="mb-5 hr_style" />
+    <!-- end item  -->
+
+    <h5 class="fw-bold mb-3">Bank</h5>
+    <div class="row">
+      <div class="col">
+        <p class="mb-0">Bank Name</p>
+      </div>
+      <div class="col d-flex justify-content-end">
+        <p class="mb-0">{{data.bank.bankName}}</p>
+      </div>
+    </div>
+    <hr class="mb-3 hr_style" />
+    <!-- end item  -->
+    <div class="row">
+      <div class="col">
+        <p class="mb-0">Branch</p>
+      </div>
+      <div class="col d-flex justify-content-end">
+        <p class="mb-0">{{data.bank.branch}}</p>
+      </div>
+    </div>
+    <hr class="mb-3 hr_style" />
+    <!-- end item  -->
+    <div class="row">
+      <div class="col">
+        <p class="mb-0">Account</p>
+      </div>
+      <div class="col d-flex justify-content-end">
+        <p class="mb-0">{{data.bank.account}}</p>
+      </div>
+    </div>
+    <hr class="mb-3 hr_style" />
+    <!-- end item  -->
+    <div class="row">
+      <div class="col">
+        <p class="mb-0">Pay day</p>
+      </div>
+      <div class="col d-flex justify-content-end">
+        <p class="mb-0">{{data.payday}}</p>
+      </div>
+    </div>
+    <hr class="mb-3 hr_style" />
+    <!-- end item  -->
+    <div class="row">
+      <div class="col">
+        <p class="mb-0">Salary</p>
+      </div>
+      <div class="col d-flex justify-content-end">
+        <p class="mb-0">{{data.salary}}</p>
+      </div>
+    </div>
+    <hr class="mb-3 hr_style" />
+    <!-- end item  -->
+  </div>
+</div>

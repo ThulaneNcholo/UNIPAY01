@@ -1,0 +1,127 @@
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+
+  .sidebar_icon {
+    font-size: 22px;
+    margin-right: 15px;
+  }
+
+  .documents_icon {
+    color: var(--primary_color);
+  }
+
+  .documents_card:hover {
+    cursor: pointer;
+    background-color: var(--background_color);
+    border-radius: 12px;
+  }
+
+  .documents_hover:hover {
+    cursor: pointer;
+  }
+</style>
+
+<div class="container pb-5">
+  <h3 class="mb-5 fw-bold">UNIPAY</h3>
+  <a href="{% url 'index' %}">
+    <div class="d-flex align-items-center mb-3">
+      <i class="bi bi-grid-1x2-fill sidebar_icon"></i>
+      <h6 class="mb-0">Dashboard</h6>
+    </div>
+  </a>
+  <a href="{% url 'customers' %}">
+    <div class="d-flex align-items-center mb-3">
+      <i class="bi bi-people-fill sidebar_icon"></i>
+      <h6 class="mb-0">Clients</h6>
+    </div>
+  </a>
+  <a href="{% url 'list-inventory' %}">
+    <div class="d-flex align-items-center mb-3">
+      <i class="bi bi-box-seam-fill sidebar_icon"></i>
+      <h6 class="mb-0">Inventory / Services</h6>
+    </div>
+  </a>
+  <a href="{% url 'list-expenses' %}">
+    <div class="d-flex align-items-center mb-3">
+      <i class="bi bi-database-fill-dash sidebar_icon"></i>
+      <h6 class="mb-0">Expenses</h6>
+    </div>
+  </a>
+  <button
+    id="toggleButton"
+    class="p-0 border-0"
+    style="background-color: transparent"
+  >
+    <div class="d-flex align-items-center mb-3 documents_hover">
+      <i class="bi bi-file-text-fill sidebar_icon"></i>
+      <h6 class="mb-0">Transactions</h6>
+    </div>
+  </button>
+
+  <!-- documents start  -->
+  <div id="myDiv" class="mb-4" style="display: block">
+    <a href="{% url 'list-sales' %}">
+      <div class="d-flex documents_card mb-3">
+        <i class="bi bi-arrow-right-circle-fill documents_icon mx-3"></i>
+        <p class="mb-0">Sales</p>
+      </div>
+    </a>
+    <!-- end item  -->
+    <a href="{% url 'list-invoices' %}">
+      <div class="d-flex documents_card mb-3">
+        <i class="bi bi-arrow-right-circle-fill documents_icon mx-3"></i>
+        <p class="mb-0">Invoices</p>
+      </div>
+    </a>
+    <!-- end item  -->
+    <a href="{% url 'list-qoutes' %}">
+      <div class="d-flex documents_card mb-3">
+        <i class="bi bi-arrow-right-circle-fill documents_icon mx-3"></i>
+        <p class="mb-0">Qoutes</p>
+      </div>
+    </a>
+    <!-- end item  -->
+    <div class="d-flex documents_card mb-3">
+      <i class="bi bi-arrow-right-circle-fill documents_icon mx-3"></i>
+      <p class="mb-0">Receipts</p>
+    </div>
+    <!-- end item  -->
+  </div>
+  <!-- documents end  -->
+
+  <a href="{% url 'todos' %}">
+    <div class="d-flex align-items-center mb-3">
+      <i class="bi bi-bookmark-check-fill sidebar_icon"></i>
+      <h6 class="mb-0">Todo's</h6>
+    </div>
+  </a>
+  <a href="{% url 'employees' %}">
+    <div class="d-flex align-items-center mb-3">
+      <i class="bi bi-person-square sidebar_icon"></i>
+      <h6 class="mb-0">Employess</h6>
+    </div>
+  </a>
+  <a href="{% url 'company-profile' %}">
+    <div class="d-flex align-items-center mb-3">
+      <i class="bi bi-gear-fill sidebar_icon"></i>
+      <h6 class="mb-0">Company Profile</h6>
+    </div>
+  </a>
+</div>
+
+<script>
+  // JavaScript to toggle the div's visibility
+  document
+    .getElementById("toggleButton")
+    .addEventListener("click", function () {
+      var div = document.getElementById("myDiv");
+      if (div.style.display === "none") {
+        div.style.display = "block";
+      } else {
+        div.style.display = "none";
+      }
+    });
+</script>

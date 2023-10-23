@@ -1,0 +1,579 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+{% block content %}
+
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+
+  .invoice_labels {
+    margin-bottom: 0px;
+  }
+
+  .btn_address {
+    background-color: var(--primary_color);
+    color: var(--background_color);
+  }
+
+  .client_company_tag {
+    font-size: 14px;
+  }
+
+  .client_image {
+    font-size: 25px;
+  }
+
+  /* document actions  */
+  .document_btns {
+    width: 100%;
+  }
+
+  /* dcoument table styling  */
+  .document_table_headings {
+    background-color: var(--background_color);
+  }
+
+  .subTotal_container {
+    background-color: var(--primary_color);
+    color: white;
+  }
+
+  .btn_actions {
+    background-color: var(--primary_color);
+    color: white;
+    margin-right: 15px;
+  }
+
+  .payment_icon {
+    color: var(--primary_color);
+  }
+
+  .add_item_icon {
+    color: var(--primary_color);
+    font-size: 22px;
+  }
+</style>
+<i class="bi bi-arrow-left-square-fill back_arrow" onclick="history.back()"></i>
+<div class="d-flex my-4">
+  <button class="btn btn_actions">
+    <i class="bi bi-file-pdf-fill"></i> download
+  </button>
+  <button class="btn btn_actions">
+    <i class="bi bi-envelope-at-fill"></i> email
+  </button>
+  <button class="btn btn-danger">
+    <i class="bi bi-trash3-fill"></i> delete
+  </button>
+  {% if methodType == 'Qoute' %}
+  <form method="POST">
+    {% csrf_token %}
+    <button class="btn btn_actions mx-3" type="submit" name="convert_qoute">
+      <i class="bi bi-receipt"></i> convert invoice
+    </button>
+  </form>
+  {% endif %}
+</div>
+
+<!-- divider  -->
+{% if methodType == 'Invoice' %}
+<div class="row mb-5">
+  <div class="col">
+    <div class="card_container shadow-sm px-3 py-4 col_sizes">
+      <h5 class="fw-bold mb-2">Amount Due</h5>
+      <p class="mb-0">R{{document.income}}</p>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card_container shadow-sm px-3 py-4 col_sizes">
+      <h5 class="fw-bold">Paid</h5>
+      {% if document.amountPaid != None %}
+      <p class="mb-0">R{{document.amountPaid}}</p>
+      {% else %}
+      <p class="mb-0">R0</p>
+      {% endif %}
+    </div>
+    <!-- ======= Payment Modal  ======= -->
+    {% include 'transactions/transaction_payment.html' %}
+  </div>
+</div>
+{% endif %}
+
+<div class="row">
+  <div class="col">
+    <div class="card_container shadow-sm px-3 py-4 mb-5">
+      <h4 class="mb-4 fw-bold">{{methodType}}</h4>
+      <!-- ======= Invoice Number  ======= -->
+      <div class="row mb-2">
+        <div class="col-6">
+          <div class="row d-flex align-items-center">
+            <div class="col-3">
+              <p class="invoice_labels mb-0">Invoice number</p>
+            </div>
+            <div class="col">
+              <input
+                type="text"
+                class="form-control input_style"
+                aria-describedby="invoice number"
+                value="#{{document.ref}}"
+                readonly
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- ======= Issue Date  ======= -->
+      <div class="row mb-2">
+        <div class="col-6">
+          <div class="row d-flex align-items-center">
+            <div class="col-3">
+              <p class="invoice_labels mb-0">Issue Date</p>
+            </div>
+            <div class="col">
+              <input
+                type="text"
+                class="form-control input_style"
+                aria-describedby="invoice number"
+                value="{{document.issueDate}}"
+                readonly
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- ======= Issue Date  ======= -->
+      <div class="row mb-2">
+        <div class="col-6">
+          <div class="row d-flex align-items-center">
+            <div class="col-3">
+              <p class="invoice_labels mb-0">Due Date</p>
+            </div>
+            <div class="col">
+              <input
+                type="text"
+                class="form-control input_style"
+                aria-describedby="invoice number"
+                value="{{document.dueDate}}"
+                readonly
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======= Document data  ======= -->
+      <div class="row my-5">
+        <div class="col">
+          <!-- ======= Company ======= -->
+          <div>
+            <h5 class="fw-bold mb-3">From</h5>
+            <div class="row mb-2">
+              <div class="col">
+                <div class="row d-flex align-items-center">
+                  <div class="col-3">
+                    <p class="invoice_labels mb-0">Name</p>
+                  </div>
+                  <div class="col">
+                    <input
+                      type="text"
+                      class="form-control input_style"
+                      value="{{document.company.companyInfo.name}}"
+                      readonly
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end input item  -->
+            <div class="row mb-2">
+              <div class="col">
+                <div class="row d-flex align-items-center">
+                  <div class="col-3">
+                    <p class="invoice_labels mb-0">Email</p>
+                  </div>
+                  <div class="col">
+                    <input
+                      type="text"
+                      class="form-control input_style"
+                      value="{{document.company.companyInfo.email}}"
+                      readonly
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end input item  -->
+            <div class="row mb-2">
+              <div class="col">
+                <div class="row d-flex align-items-center">
+                  <div class="col-3">
+                    <p class="invoice_labels mb-0">Phone</p>
+                  </div>
+                  <div class="col">
+                    <input
+                      type="text"
+                      class="form-control input_style"
+                      value="{{document.company.companyInfo.phone}}"
+                      readonly
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end input item  -->
+            <div class="row mb-2">
+              <div class="col">
+                <div class="row d-flex align-items-center">
+                  <div class="col-3">
+                    <p class="invoice_labels mb-0">Registration #</p>
+                  </div>
+                  <div class="col">
+                    <input
+                      type="text"
+                      class="form-control input_style"
+                      value="{{document.company.companyInfo.registration}}"
+                      readonly
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end input item  -->
+          </div>
+        </div>
+        <div class="col">
+          <!-- ======= Client ======= -->
+          <div>
+            <h5 class="fw-bold mb-3">To</h5>
+            <div class="row mb-2">
+              <div class="col">
+                <div class="row d-flex align-items-center">
+                  <div class="col-3">
+                    <p class="invoice_labels mb-0">Name</p>
+                  </div>
+                  <div class="col">
+                    <input
+                      type="text"
+                      class="form-control input_style"
+                      value="{{document.customer.company_name}}"
+                      readonly
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end input item  -->
+            <div class="row mb-2">
+              <div class="col">
+                <div class="row d-flex align-items-center">
+                  <div class="col-3">
+                    <p class="invoice_labels mb-0">Email</p>
+                  </div>
+                  <div class="col">
+                    <input
+                      type="text"
+                      class="form-control input_style"
+                      value="{{document.customer.email}}"
+                      readonly
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end input item  -->
+            <div class="row mb-2">
+              <div class="col">
+                <div class="row d-flex align-items-center">
+                  <div class="col-3">
+                    <p class="invoice_labels mb-0">Phone</p>
+                  </div>
+                  <div class="col">
+                    <input
+                      type="text"
+                      class="form-control input_style"
+                      value="{{document.customer.phone}}"
+                      readonly
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end input item  -->
+            <div class="row mb-2">
+              <div class="col">
+                <div class="row d-flex align-items-center">
+                  <div class="col-3">
+                    <p class="invoice_labels mb-0">Registration #</p>
+                  </div>
+                  <div class="col">
+                    <input
+                      type="text"
+                      class="form-control input_style"
+                      value="{{document.customer.company_registered_number}}"
+                      readonly
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end input item  -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ======= Table Headings  ======= -->
+      <div class="row document_table_headings py-3 mx-0 mb-3">
+        <div class="col">
+          <h6 class="fw-bold mb-0">Item</h6>
+        </div>
+        <div class="col">
+          <h6 class="fw-bold mb-0">Description</h6>
+        </div>
+        <div class="col">
+          <h6 class="fw-bold mb-0">Price</h6>
+        </div>
+        <div class="col">
+          <h6 class="fw-bold mb-0">Qty</h6>
+        </div>
+        <div class="col">
+          <h6 class="fw-bold mb-0">Type</h6>
+        </div>
+
+        <div class="col">
+          <h6 class="fw-bold mb-0">Total</h6>
+        </div>
+      </div>
+
+      <!-- ======= Table row  ======= -->
+      {% for data in transactions %}
+      <div class="row mx-0 py-3">
+        {% if data.docuemntType == 'Inventory'%}
+        <div class="col">
+          <p class="mb-0">{{data.inventory.name}}</p>
+        </div>
+        <div class="col">
+          <p class="mb-0">{{data.inventory.description}}</p>
+        </div>
+        <div class="col">
+          <p class="mb-0">R{{data.inventory.sellingprice}}</p>
+        </div>
+        {% elif data.docuemntType == 'Service' %}
+        <div class="col">
+          <p class="mb-0">{{data.service.name}}</p>
+        </div>
+        <div class="col">
+          <p class="mb-0">{{data.service.description}}</p>
+        </div>
+        <div class="col">
+          <p class="mb-0">R{{data.service.serviceFee}}</p>
+        </div>
+        {% endif %}
+        <div class="col">
+          <p class="mb-0">{{data.documentQuantity}}</p>
+        </div>
+        <div class="col">
+          <p class="mb-0">{{data.docuemntType}}</p>
+        </div>
+
+        <div class="col">
+          <p class="mb-0 fw-bold">R{{data.documentTotal}}</p>
+        </div>
+      </div>
+      {% endfor %}
+
+      <hr class="my-4" />
+      <!-- ======= Balance DUe  ======= -->
+      <div class="row mt-3 mb-4 mx-0">
+        <div class="col-6"></div>
+        <div class="col-6">
+          <div class="row subTotal_container py-3">
+            <div class="col">
+              {% if methodType == 'Sale'%}
+              <h6 class="fw-bold mb-0">Amount Paid</h6>
+              {% else %}
+              <h6 class="fw-bold mb-0">Balance Due</h6>
+              {% endif %}
+            </div>
+            <div class="col">
+              <h6 class="fw-bold mb-0" id="balanceDue">R{{document.income}}</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======= Notes  ======= -->
+      <div class="mb-5">
+        <label for="exampleFormControlTextarea1" class="form-label"
+          >Notes</label
+        >
+        <textarea
+          class="form-control"
+          id="exampleFormControlTextarea1"
+          rows="4"
+          readonly
+        >
+{{document.notes}}</textarea
+        >
+      </div>
+
+      <!-- ======= Dcoument Bank  ======= -->
+      <h5 class="fw-bold my-5">Payment information:</h5>
+      <div class="row mb-2">
+        <div class="col-6">
+          <div class="row d-flex align-items-center">
+            <div class="col-3">
+              <p class="invoice_labels mb-0">Bank</p>
+            </div>
+            <div class="col">
+              <input
+                type="text"
+                class="form-control input_style"
+                aria-describedby="bank name"
+                value="{{document.company.bank.bankName}}"
+                readonly
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end item  -->
+      <div class="row mb-2">
+        <div class="col-6">
+          <div class="row d-flex align-items-center">
+            <div class="col-3">
+              <p class="invoice_labels mb-0">Branch</p>
+            </div>
+            <div class="col">
+              <input
+                type="text"
+                class="form-control input_style"
+                aria-describedby="bank name"
+                value="{{document.company.bank.branch}}"
+                readonly
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end item  -->
+      <div class="row mb-2">
+        <div class="col-6">
+          <div class="row d-flex align-items-center">
+            <div class="col-3">
+              <p class="invoice_labels mb-0">Account #</p>
+            </div>
+            <div class="col">
+              <input
+                type="text"
+                class="form-control input_style"
+                aria-describedby="bank name"
+                value="{{document.company.bank.account}}"
+                readonly
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end item  -->
+    </div>
+  </div>
+  {% if methodType == 'Invoice' %}
+  <div class="col-3">
+    <div class="card_container shadow-sm px-3 py-4 mb-5">
+      <div class="row">
+        <div class="col">
+          <h4 class="mb-4 fw-bold">Payments History</h4>
+        </div>
+        <div class="col-2">
+          <a
+            data-bs-toggle="modal"
+            href="#paymentModal{{document.id}}"
+            aria-controls="offcanvasExample"
+          >
+            <i class="bi bi-plus-circle-fill add_item_icon"></i>
+          </a>
+        </div>
+      </div>
+
+      {% for data in payments %}
+      <div class="row mb-3">
+        <div class="col">
+          <p class="mb-0">
+            <i class="bi bi-calendar-check payment_icon"></i> {{data.date}}
+          </p>
+        </div>
+        <div class="col-3 d-flex justify-content-end">
+          <p class="mb-0 fw-bold">R{{data.paid}}</p>
+        </div>
+      </div>
+      {% empty %}
+      <p>No Payments Made</p>
+      {% endfor %}
+
+      <div class="my-3">
+        {% if document.income == payment_total %}
+        <button class="btn btn-success" style="width: 100%">Paid</button>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card_container shadow-sm px-3 py-4 mb-5">
+      <div class="row">
+        <div class="col">
+          <h4 class="mb-4 fw-bold">Recurring</h4>
+        </div>
+        <div class="col d-flex justify-content-end">
+          <a
+            data-bs-toggle="offcanvas"
+            href="#recurringOffcanvas"
+            aria-controls="offcanvasExample"
+          >
+            <i class="bi bi-plus-circle-fill add_item_icon"></i>
+          </a>
+        </div>
+      </div>
+
+      {% if document.recurring_transaction %}
+      <div class="row">
+        <div class="col">
+          <p>Period</p>
+        </div>
+        <div class="col">
+          <p>
+            Every {{document.recurring_transaction.recurrence_period}} months
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <p>Date</p>
+        </div>
+        <div class="col">
+          <p>{{document.recurring_transaction.start_date}}</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <p>Status</p>
+        </div>
+        <div class="col">
+          <p>{{document.recurring_transaction.status}}</p>
+        </div>
+      </div>
+      {% else %}
+      <p>Not created</p>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+<!-- ======= Recurring Offcanvas  ======= -->
+{% include 'transactions/recurringOffcanvas.html' %}
+
+<!-- divider  -->
+
+{% endblock %}

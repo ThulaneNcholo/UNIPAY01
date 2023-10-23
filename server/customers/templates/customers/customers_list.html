@@ -1,0 +1,163 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+{% block content %}
+
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+
+  .main_btn {
+    background-color: var(--primary_color);
+    color: white;
+  }
+
+  .outline_btn {
+    border-color: var(--primary_color);
+    color: var(--primary_color);
+  }
+
+  .customer_search_input {
+    border-radius: 24px;
+  }
+
+  /* Client List style  */
+  .component_card {
+    background-color: white;
+  }
+
+  .table_headings {
+    color: grey;
+    font-size: 18px;
+  }
+
+  .btn_actions {
+    background-color: var(--primary_color);
+    color: white;
+  }
+
+  .actions_card {
+    background-color: white;
+    width: 100%;
+  }
+
+  .actions_card :hover {
+    background-color: var(--primary_color);
+    color: white;
+  }
+
+  .client_icon {
+    color: var(--primary_color);
+    font-size: 22px;
+  }
+</style>
+
+<!-- ======= Messages Notification  ======= -->
+<div>
+  {% for message in messages %}
+  <div class="alert alert-success my-5" role="alert">{{message}}</div>
+  {% endfor %}
+</div>
+
+<!-- ======= Clients Table ====== -->
+<div class="card_container shadow-sm px-3 py-4 mb-5">
+  <div class="row mb-5 d-flex align-items-center">
+    <div class="col">
+      <h5 class="fw-bold">All Clients</h5>
+    </div>
+    <div class="col">
+      <div class="row d-flex justify-content-end">
+        <div class="col-6">
+          <a href="{% url 'add-customer'%}">
+            <button class="btn new_invoice_btn py-2 shadow-sm fw-bold">
+              <i class="bi bi-plus-circle-fill add_invoice_icon"></i> add Clinet
+            </button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-3">
+      <div class="input-group mb-3 search_main_container">
+        <span class="input-group-text search_container" id="basic-addon1"
+          ><i class="bi bi-search text-secondary"></i
+        ></span>
+        <input
+          type="text"
+          class="form-control search_bar"
+          placeholder="Referance No."
+          aria-label="client search bar"
+          aria-describedby="basic-addon1"
+        />
+      </div>
+    </div>
+    <!-- end search item  -->
+    <div class="col-3">
+      <select
+        class="form-select sort_filter"
+        aria-label="Default select example"
+      >
+        <option selected>Sort By</option>
+        <option value="1">One</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- ======= table row start  ====== -->
+  <div class="row mb-4">
+    <div class="col">
+      <p class="mb-0 table_headings">Client Name</p>
+    </div>
+    <div class="col">
+      <p class="mb-0 table_headings">Referance</p>
+    </div>
+    <div class="col">
+      <p class="mb-0 table_headings">Phone</p>
+    </div>
+    <div class="col">
+      <p class="mb-0 table_headings">Email</p>
+    </div>
+    <div class="col">
+      <center>
+        <p class="mb-0 table_headings">Actions</p>
+      </center>
+    </div>
+  </div>
+  <hr class="table_line" />
+  <!-- end headings  -->
+
+  {% for data in clients %}
+  <div class="row mb-3">
+    <div class="col">
+      <p class="mb-0">{{data.firstName}} {{data.lastName}}</p>
+    </div>
+    <div class="col">
+      <p class="mb-0">#{{data.ref}}</p>
+    </div>
+    <div class="col">
+      <p class="mb-0">{{data.phone}}</p>
+    </div>
+    <div class="col">
+      <p class="mb-0">{{data.email}}</p>
+    </div>
+    <div class="col">
+      <center>
+        <a href="{% url 'client-details' data.id %}">
+          <button class="btn btn_actions">view</button>
+        </a>
+      </center>
+    </div>
+  </div>
+  <hr class="table_line" />
+  {% endfor %}
+  <!-- end table row  -->
+</div>
+
+{% endblock %}

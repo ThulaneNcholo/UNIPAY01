@@ -1,0 +1,225 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+{% block content %}
+
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+
+  .success_icon {
+    font-size: 50px;
+  }
+
+  .item_icon {
+    font-size: 18px;
+    margin-right: 20px;
+  }
+
+  .btn_cancel_transaction {
+    width: 100%;
+    border-radius: 15px;
+  }
+
+  .btn_complete {
+    background-color: var(--primary_color);
+    color: var(--background_color);
+    width: 100%;
+    border-radius: 15px;
+  }
+
+  .view_customer {
+    background-color: var(--primary_color);
+    color: white;
+  }
+
+  .view_customer:hover {
+    color: var(--primary_color);
+    background-color: var(--background_color);
+    cursor: pointer;
+  }
+
+  .transaction_link_card {
+    background-color: var(--primary_color);
+    color: var(--background_color);
+    border-radius: 15px;
+  }
+
+  .transaction_link_card:hover {
+    cursor: pointer;
+    background-color: var(--background_color);
+    color: var(--primary_color);
+  }
+</style>
+
+<!-- ======= back icon  ======= -->
+<i class="bi bi-arrow-left-circle-fill back_icon" onclick="history.back()"></i>
+
+<div class="row mt-5">
+  <!-- ======= Transaction Details  ======= -->
+  <div class="col">
+    <div class="card_container shadow-sm px-3 py-4 mb-5">
+      <center>
+        <i class="bi bi-check-circle-fill success_icon text-success mb-3"></i>
+        <h5 class="mb-5">Transaction Successfull</h5>
+      </center>
+      <ul class="list-group mb-5">
+        <li class="list-group-item py-3">
+          <div class="row">
+            <div class="col fw-bold">Total Cost</div>
+            <div class="col fw-bold">R{{transaction.income}}</div>
+          </div>
+        </li>
+        <li class="list-group-item py-3">
+          <div class="row">
+            <div class="col text-secondary">Item</div>
+            <div class="col">
+              <div class="row">
+                <div class="col d-flex justify-content-start">
+                  {{transaction.item.name}}
+                </div>
+                <div class="col d-flex justify-content-end">
+                  <p class="badge mb-0 view_customer px-3">view</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item py-3">
+          <div class="row">
+            <div class="col text-secondary">Item reference</div>
+            <div class="col">#{{transaction.item.ref}}</div>
+          </div>
+        </li>
+        <li class="list-group-item py-3">
+          <div class="row">
+            <div class="col text-secondary">Quantity</div>
+            <div class="col">{{transaction.quantity}}</div>
+          </div>
+        </li>
+        {% if transaction.discount %}
+        <li class="list-group-item py-3">
+          <div class="row">
+            <div class="col text-secondary">Discount Percent %</div>
+            <div class="col">{{transaction.discount}}%</div>
+          </div>
+        </li>
+        <li class="list-group-item py-3">
+          <div class="row">
+            <div class="col text-secondary">Discount Fee</div>
+            <div class="col">R{{transaction.discounted_price}}</div>
+          </div>
+        </li>
+        {% endif %}
+
+        <!-- check if theres a customer  -->
+        {% if transaction.customer %}
+        <li class="list-group-item py-3">
+          <div class="row">
+            <div class="col text-secondary">Customer</div>
+            <div class="col">
+              <div class="row">
+                <div class="col d-flex justify-content-start">
+                  {{transaction.customer.firstName}}
+                  {{transaction.customer.lastName}}
+                </div>
+                <div class="col d-flex justify-content-end">
+                  <p class="badge mb-0 view_customer px-3">view</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        {% endif %}
+      </ul>
+
+      {% if addressValue == "Yes" %}
+      <h5 class="mb-3">Address</h5>
+      <ul class="list-group mb-5">
+        <li class="list-group-item py-3">
+          <div class="row">
+            <div class="col text-secondary">Full Name</div>
+            <div class="col">{{transaction.fullName}}</div>
+          </div>
+        </li>
+        <li class="list-group-item py-3">
+          <div class="row">
+            <div class="col text-secondary">Street</div>
+            <div class="col">{{transaction.address.street}}</div>
+          </div>
+        </li>
+        <li class="list-group-item py-3">
+          <div class="row">
+            <div class="col text-secondary">Suburb</div>
+            <div class="col">{{transaction.address.suburb}}</div>
+          </div>
+        </li>
+        <li class="list-group-item py-3">
+          <div class="row">
+            <div class="col text-secondary">City</div>
+            <div class="col">{{transaction.address.city}}</div>
+          </div>
+        </li>
+        <li class="list-group-item py-3">
+          <div class="row">
+            <div class="col text-secondary">Province</div>
+            <div class="col">{{transaction.address.province}}</div>
+          </div>
+        </li>
+        <li class="list-group-item py-3">
+          <div class="row">
+            <div class="col text-secondary">PO BOX</div>
+            <div class="col">{{transaction.address.pobox}}</div>
+          </div>
+        </li>
+      </ul>
+      {% endif %}
+    </div>
+  </div>
+  <!-- ======= Actions  ======= -->
+  <div class="col-3">
+    <div class="card_container shadow-sm px-3 py-4 mb-5">
+      <h5 class="mb-5">Transaction Options</h5>
+      <div
+        class="d-flex justify-content-between transaction_link_card px-3 py-2 mb-3 bg-success"
+      >
+        <p class="mb-0">Complete</p>
+        <i class="bi bi-arrow-right-circle-fill"></i>
+      </div>
+      <!-- end link item  -->
+      <div
+        class="d-flex justify-content-between transaction_link_card px-3 py-2 mb-3"
+      >
+        <p class="mb-0">Create Receipt</p>
+        <i class="bi bi-arrow-right-circle-fill"></i>
+      </div>
+      <!-- end link item  -->
+      <div
+        class="d-flex justify-content-between transaction_link_card px-3 py-2 mb-3"
+      >
+        <p class="mb-0">Create Invoice</p>
+        <i class="bi bi-arrow-right-circle-fill"></i>
+      </div>
+      <!-- end link item  -->
+      <div
+        class="d-flex justify-content-between transaction_link_card px-3 py-2 mb-3"
+      >
+        <p class="mb-0">Create Receipt</p>
+        <i class="bi bi-arrow-right-circle-fill"></i>
+      </div>
+      <!-- end link item  -->
+      <div
+        class="d-flex justify-content-between transaction_link_card px-3 py-2 mb-3 bg-danger"
+      >
+        <p class="mb-0">Cancel Transaction</p>
+        <i class="bi bi-arrow-right-circle-fill"></i>
+      </div>
+      <!-- end link item  -->
+    </div>
+  </div>
+</div>
+
+{% endblock %}

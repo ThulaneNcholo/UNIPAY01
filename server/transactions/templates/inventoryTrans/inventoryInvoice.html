@@ -1,0 +1,503 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+{% block content %}
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+
+  .invoice_labels {
+    margin-bottom: 0px;
+    margin-right: 20px;
+  }
+
+  .input_style {
+    width: 100%;
+  }
+
+  .btn_address {
+    background-color: var(--primary_color);
+    color: var(--background_color);
+  }
+
+  .qty_input_stle {
+    border-color: lightgray;
+  }
+
+  .subTotal_container {
+    background-color: var(--primary_color);
+    color: white;
+  }
+
+  .btn_submit_invoice {
+    background-color: var(--primary_color);
+    border-radius: 15px;
+    color: white;
+  }
+
+  .add_client_icon {
+    color: var(--primary_color);
+    font-size: 22px;
+  }
+
+  /* client style modal  */
+  .client_image {
+    font-size: 25px;
+  }
+
+  .client_company_tag {
+    font-size: 14px;
+  }
+
+  .company_logo {
+    height: 150px;
+    width: 100%;
+    object-fit: contain;
+  }
+</style>
+
+<i class="bi bi-arrow-left-square-fill back_arrow" onclick="history.back()"></i>
+
+<form method="POST">
+  {% csrf_token %}
+  <!-- divider  -->
+  {% if methodtype == "Invoice" %}
+  <button
+    class="btn btn_submit_invoice my-4 px-5"
+    type="submit"
+    name="submit_invoice"
+  >
+    create Invoice
+  </button>
+  {% elif methodtype == "Qoute" %}
+  <button
+    class="btn btn_submit_invoice my-4 px-5"
+    type="submit"
+    name="submit_qoute"
+  >
+    create Quote
+  </button>
+  {% endif %}
+  <!-- end  -->
+
+  <div class="card_container shadow-sm px-3 py-4">
+    <div class="row d-flex justify-content-end mb-3">
+      <div class="col-6">
+        {% if company.logo %}
+        <img src="{{company.logo.url}}" alt="" class="company_logo" />
+        {% endif %}
+      </div>
+    </div>
+    <h4 class="mb-4 fw-bold">{{methodtype}}</h4>
+
+    <!-- start invoice number,date,due date  -->
+    <div class="row">
+      <div class="col-6">
+        <div class="row d-flex align-items-center mb-3">
+          <div class="col-3">
+            <p class="invoice_labels">{{methodtype}} number</p>
+          </div>
+          <div class="col">
+            <input
+              type="text"
+              class="form-control input_style"
+              aria-describedby="invoice number"
+              value="{{ref}}"
+              name="ref"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end input item  -->
+    <div class="row">
+      <div class="col-6">
+        <div class="row d-flex align-items-center mb-3">
+          <div class="col-3">
+            <p class="invoice_labels">Date</p>
+          </div>
+          <div class="col">
+            <input
+              type="date"
+              id="dateInput"
+              class="form-control input_style"
+              aria-describedby="Due Date"
+              name="issueDate"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end input item  -->
+    <div class="row">
+      <div class="col-6">
+        <div class="row d-flex align-items-center mb-3">
+          <div class="col-3">
+            <p class="invoice_labels">Due Date</p>
+          </div>
+          <div class="col">
+            <input
+              type="date"
+              class="form-control input_style"
+              aria-describedby="Due Date"
+              name="dueDate"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end input item  -->
+
+    <!-- ======= Invoice information  ======= -->
+    <div class="row mt-5">
+      <div class="col">
+        <div class="row mb-3">
+          <div class="col">
+            <h5 class="fw-bold">From</h5>
+          </div>
+          <div class="col d-flex justify-content-end">
+            <form method="POST">
+              {% csrf_token %}
+              <input
+                type="text"
+                value="{{company.ref}}"
+                name="companyID"
+                hidden="true"
+              />
+              <button
+                class="btn btn_address"
+                hx-post="{% url 'company-data'%}"
+                hx-target="#companyData"
+              >
+                + my company
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- ======= company form data  ======= -->
+        <div id="companyData">
+          {% include 'partials/invoiceCompanyData.html' %}
+        </div>
+      </div>
+      <div class="col">
+        <div class="row mb-3">
+          <div class="col">
+            <h5 class="fw-bold">To</h5>
+          </div>
+          <div class="col d-flex justify-content-end">
+            <button
+              type="button"
+              class="btn btn_address"
+              data-bs-toggle="modal"
+              data-bs-target="#selectClient"
+            >
+              select client
+            </button>
+          </div>
+        </div>
+
+        <!-- Select Client Modal -->
+        <div
+          class="modal fade"
+          id="selectClient"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                  Select Client
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body px-3">
+                {% for data in clients%}
+                <div class="row mb-3">
+                  <div class="col-2">
+                    <i class="bi bi-person-circle client_image"></i>
+                  </div>
+                  <div class="col">
+                    <p class="mb-0">{{data.firstName}} {{data.lastName}}</p>
+                    <p class="mb-0 client_company_tag text-secondary">
+                      {{data.company_name}}
+                    </p>
+                  </div>
+                  <div class="col-3 d-flex justify-content-end">
+                    <form method="POST">
+                      {% csrf_token %}
+                      <input
+                        type="text"
+                        value="{{data.id}}"
+                        name="clientID"
+                        hidden="true"
+                      />
+                      <button
+                        class="btn btn-dark"
+                        type="submit"
+                        hx-post="{% url 'client-data'%}"
+                        hx-target="#clientData"
+                        onclick="showPopup()"
+                      >
+                        select
+                      </button>
+                    </form>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ======= Client Form Data  ======= -->
+        <div id="clientData">
+          {% include 'partials/invoiceClientDetails.html' %}
+        </div>
+      </div>
+    </div>
+
+    <!-- ======= Invoice items  ======= -->
+    <div class="border mt-5">
+      <!-- table heading  -->
+      <div class="row bg-secondary text-light mx-0 py-3">
+        <div class="col">
+          <h6 class="fw-bold mb-0">Item</h6>
+        </div>
+        <div class="col">
+          <h6 class="fw-bold mb-0">Description</h6>
+        </div>
+        <div class="col">
+          <h6 class="fw-bold mb-0">
+            Qty
+            <span class="badge bg-danger mx-2" id="instockQty"
+              >{{item.quantity}}</span
+            >
+          </h6>
+        </div>
+        <div class="col">
+          <h6 class="fw-bold mb-0">Price</h6>
+        </div>
+        <div class="col">
+          <h6 class="fw-bold mb-0">Total</h6>
+        </div>
+      </div>
+      <!-- table heading  -->
+      <div class="row mx-0 py-3">
+        <div class="col">
+          <p class="mb-0">{{item.name}}</p>
+        </div>
+        <div class="col">
+          <p class="mb-0">{{item.description}}</p>
+        </div>
+        <div class="col">
+          <p class="mb-0">
+            <input
+              type="text"
+              class="form-control input_style"
+              aria-describedby="Business Reference"
+              value="1"
+              id="qty_input"
+              name="itemQuantity"
+            />
+          </p>
+        </div>
+        <div class="col">
+          <p class="mb-0">R{{item.sellingprice}}</p>
+          <input
+            type="text"
+            id="price"
+            value="{{item.sellingprice}}"
+            hidden="true"
+          />
+        </div>
+        <div class="col">
+          <p class="mb-0" id="total"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======= Sub Total  ======= -->
+    <div class="row my-3">
+      <div class="col-6"></div>
+      <div class="col-6">
+        <div class="row subTotal_container py-3">
+          <div class="col">
+            <h6 class="fw-bold mb-0">Sub Total</h6>
+          </div>
+          <div class="col">
+            <h6 class="fw-bold mb-0" id="SubTotal">R3000</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ======= Balance DUe  ======= -->
+    <div class="row mt-3 mb-4">
+      <div class="col-6"></div>
+      <div class="col-6">
+        <div class="row subTotal_container py-3">
+          <div class="col">
+            <h6 class="fw-bold mb-0">Balance Due</h6>
+          </div>
+          <div class="col">
+            <h6 class="fw-bold mb-0" id="balanceDue">R3000</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======= Notes  ======= -->
+    <div class="mb-5">
+      <label for="exampleFormControlTextarea1" class="form-label">Notes</label>
+      <textarea
+        class="form-control"
+        id="exampleFormControlTextarea1"
+        rows="4"
+        name="notes"
+      ></textarea>
+    </div>
+
+    <!-- ======= Bank Details  ======= -->
+    <div class="row">
+      <div class="col-6">
+        <div class="row">
+          <div class="col">
+            <h5 class="fw-bold mb-5">Payment information:</h5>
+          </div>
+          <div class="col">
+            <form method="POST">
+              {% csrf_token %}
+              <input
+                type="text"
+                value="{{company.bank.id}}"
+                hidden="true"
+                name="companyBank"
+              />
+              <button
+                class="btn btn_address"
+                type="submit"
+                hx-post="{% url 'company-bank'%}"
+                hx-target="#bankData"
+              >
+                + company bank
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======= Bank Details Partial  ======= -->
+    <div class="row" id="bankData">
+      {% include 'partials/invoiceBank.html' %}
+    </div>
+
+    <!-- ======= Bank Reference  ======= -->
+    <div class="row">
+      <div class="col-6">
+        <div class="row d-flex align-items-center mb-3">
+          <div class="col-3">
+            <p class="invoice_labels">Reference</p>
+          </div>
+          <div class="col">
+            <input
+              type="text"
+              class="form-control input_style"
+              aria-describedby="Business Reference"
+              value="{{ref}}"
+              name="bankRef"
+            />
+          </div>
+        </div>
+        <!-- end address input  -->
+      </div>
+    </div>
+  </div>
+
+  <!-- <center>
+    <button
+      type="submit"
+      name="submit_invoice"
+      class="btn btn_action my-5 py-3"
+      style="width: 70%"
+    >
+      create invoice
+    </button>
+  </center> -->
+</form>
+
+<script>
+  // invoice issue date
+  const dateInput = document.getElementById("dateInput");
+
+  // Create a new Date object representing today's date
+  const today = new Date();
+
+  // Format the date as "YYYY-MM-DD"
+  const formattedDate = today.toISOString().split("T")[0];
+
+  // Set the value of the date input field
+  dateInput.value = formattedDate;
+
+  function fromAddress() {
+    const addressDiv = document.getElementById("fromAddressID");
+    const addressFromValue = document.getElementById("AddressFrom");
+
+    if (addressDiv.style.display == "none") {
+      addressDiv.style.display = "block";
+      addressFromValue.value = "Yes";
+    } else {
+      addressDiv.style.display = "none";
+      addressFromValue.value = "No";
+    }
+  }
+
+  function ToAddress() {
+    const addressDiv = document.getElementById("ToAddressID");
+    const addressFromValue = document.getElementById("AddressTo");
+
+    if (addressDiv.style.display == "none") {
+      addressDiv.style.display = "block";
+      addressFromValue.value = "Yes";
+    } else {
+      addressDiv.style.display = "none";
+      addressFromValue.value = "No";
+    }
+  }
+
+  const sellingprice = document.getElementById("price").value;
+  const itemTotal = 1 * sellingprice;
+  const total = (document.getElementById("total").innerHTML = "R" + itemTotal);
+  const subTotal = (document.getElementById("SubTotal").innerHTML =
+    "R" + itemTotal);
+  const balance = (document.getElementById("balanceDue").innerHTML =
+    "R" + itemTotal);
+
+  const qtyInput = document.getElementById("qty_input");
+  // Add an event listener to the input element to listen for changes
+  qtyInput.addEventListener("input", function () {
+    // This function will be called whenever the input changes
+
+    // Get the current value of the input element
+    const inputValue = qtyInput.value;
+    const itemTotal = inputValue * sellingprice;
+    const total = (document.getElementById("total").innerHTML =
+      "R" + itemTotal);
+    const subTotal = (document.getElementById("SubTotal").innerHTML =
+      "R" + itemTotal);
+    const balance = (document.getElementById("balanceDue").innerHTML =
+      "R" + itemTotal);
+  });
+</script>
+
+{% endblock %}

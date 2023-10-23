@@ -1,0 +1,94 @@
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+
+  .transaction_link_card {
+    background-color: var(--primary_color);
+    color: var(--background_color);
+    border-radius: 15px;
+  }
+
+  .transaction_link_card:hover {
+    cursor: pointer;
+    background-color: var(--background_color);
+    color: var(--primary_color);
+  }
+</style>
+
+<div
+  class="offcanvas offcanvas-start"
+  tabindex="-1"
+  id="itemTransaction{{item.id}}"
+  aria-labelledby="offcanvasExampleLabel"
+>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasExampleLabel">
+      {{item.name}} : Transactions
+    </h5>
+    <button
+      type="button"
+      class="btn-close text-reset"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body">
+    <a href="{% url 'inventory-sale' item.id  %}">
+      <div
+        class="d-flex justify-content-between transaction_link_card px-3 py-2 mb-3"
+      >
+        <p class="mb-0">Sale</p>
+        <i class="bi bi-arrow-right-circle-fill"></i>
+      </div>
+    </a>
+    <!-- end link item  -->
+    <a href="{% url 'inventory-invoice' item.id 1 %}">
+      <div
+        class="d-flex justify-content-between transaction_link_card px-3 py-2 mb-3"
+      >
+        <p class="mb-0">Invoice</p>
+        <i class="bi bi-arrow-right-circle-fill"></i>
+      </div>
+    </a>
+    <!-- end link item  -->
+    <a href="{% url 'inventory-invoice' item.id 2 %}">
+      <div
+        class="d-flex justify-content-between transaction_link_card px-3 py-2 mb-3"
+      >
+        <p class="mb-0">Qoute</p>
+        <i class="bi bi-arrow-right-circle-fill"></i>
+      </div>
+    </a>
+    <!-- end link item  -->
+    <div
+      class="d-flex justify-content-between transaction_link_card px-3 py-2 mb-3"
+    >
+      <p class="mb-0">Receipt</p>
+      <i class="bi bi-arrow-right-circle-fill"></i>
+    </div>
+    <!-- end link item  -->
+    <div
+      class="d-flex justify-content-between transaction_link_card px-3 py-2 mb-3"
+    >
+      <p class="mb-0">Creadit Note</p>
+      <i class="bi bi-arrow-right-circle-fill"></i>
+    </div>
+    <!-- end link item  -->
+    <div
+      class="d-flex justify-content-between transaction_link_card px-3 py-2 mb-3"
+    >
+      <p class="mb-0">Purchase Order</p>
+      <i class="bi bi-arrow-right-circle-fill"></i>
+    </div>
+    <!-- end link item  -->
+    <div
+      class="d-flex justify-content-between transaction_link_card px-3 py-2 mb-3"
+    >
+      <p class="mb-0">Return Item</p>
+      <i class="bi bi-arrow-right-circle-fill"></i>
+    </div>
+    <!-- end link item  -->
+  </div>
+</div>

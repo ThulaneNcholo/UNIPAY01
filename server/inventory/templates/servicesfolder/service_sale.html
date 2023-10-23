@@ -1,0 +1,148 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+{% block content %}
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+
+  .item_name {
+    color: var(--primary_color);
+  }
+</style>
+
+<form method="POST">
+  {% csrf_token %}
+  <div class="row">
+    <div class="col">
+      <div class="card_container shadow-sm px-3 py-4 col_sizes">
+        <h5 class="fw-bold mb-3">
+          <span class="item_name">{{service.name}}</span> : Sale Request
+        </h5>
+        <div class="form-floating mb-3">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            value="{{service.serviceFee}}"
+            readonly
+          />
+          <label for="floatingInput">Service Fee</label>
+        </div>
+        <!-- end input item  -->
+        <div class="mb-3">
+          <label for="exampleFormControlTextarea1" class="form-label"
+            >Description</label
+          >
+          <textarea
+            class="form-control"
+            id="exampleFormControlTextarea1"
+            rows="3"
+            readonly
+          >
+{{service.description}}</textarea
+          >
+        </div>
+        <!-- end input item  -->
+        <div class="form-floating mb-3">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            placeholder="Sale reference"
+            value="{{ref}}"
+            name="reference"
+          />
+          <label for="floatingInput">Sale reference</label>
+        </div>
+        <!-- end input item  -->
+        <select
+          class="form-select select_padding"
+          aria-label="Default select example"
+          name="customerID"
+          hx-post="{% url 'client-address' %}"
+          hx-target="#addressDiv"
+        >
+          <option selected value="none">Select Customer</option>
+          {% for data in customers %}
+          <option value="{{data.id}}">{{data.firstName}}</option>
+          {% endfor %}
+        </select>
+        <div id="customer select" class="form-text mb-3">Optional</div>
+        <!-- end input item  -->
+        <div class="form-floating mb-4">
+          <input
+            type="number"
+            class="form-control"
+            id="floatingInput"
+            placeholder="Quantity"
+            value="1"
+            name="quantity"
+          />
+          <label for="floatingInput">Quantity</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card_container shadow-sm px-3 py-4 col_sizes">
+        <h5 class="fw-bold mb-3">
+          Address :
+          <span class="text-secondary" style="font-size: 14px">Optional</span>
+        </h5>
+        <div class="form-check form-switch mb-4">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="flexSwitchCheckDefault"
+          />
+          <label class="form-check-label" for="flexSwitchCheckDefault"
+            ><i class="bi bi-arrow-left px-2"></i> switch button to attact
+            address to customer</label
+          >
+        </div>
+        <!-- Address Value input  -->
+        <input
+          type="text"
+          name="addressValue"
+          id="addressInput"
+          value="No"
+          hidden="true"
+        />
+
+        <div id="addressDiv" style="display: none">
+          <!-- ======= Address HTMX   ======= -->
+          {% include 'partials/address_partial.html' %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <center>
+    <button class="btn btn_submit py-3 my-5" type="submit" name="submit_sale">
+      Submit Sale
+    </button>
+  </center>
+</form>
+
+<script>
+  //   show and hide address model
+  const toggleSwitch = document.getElementById("flexSwitchCheckDefault");
+  const targetDiv = document.getElementById("addressDiv");
+
+  toggleSwitch.addEventListener("change", function () {
+    if (this.checked) {
+      targetDiv.style.display = "block"; // Show the div when the checkbox is checked
+      document.getElementById("addressInput").value = "Yes";
+    } else {
+      targetDiv.style.display = "none"; // Hide the div when the checkbox is unchecked
+      document.getElementById("addressInput").value = "No";
+    }
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+{% block content %}
+
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+</style>
+
+<div class="card_container shadow-sm px-3 py-4">
+  <form method="POST" enctype="multipart/form-data" autocomplete="off">
+    {% csrf_token %}
+    <h5 class="fw-bold mb-5">Add Expense</h5>
+    <div class="row">
+      <div class="col-6">
+        <div class="form-floating">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            placeholder="Expense reference"
+            name="Referrance"
+            value="{{ref}}"
+          />
+          <label for="floatingInput">Reference</label>
+        </div>
+      </div>
+      <!-- end input item  -->
+      <div class="col-6">
+        <div class="form-floating mb-4">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            placeholder="Name"
+            name="name"
+          />
+          <label for="floatingInput">Name</label>
+        </div>
+      </div>
+      <!-- end input item  -->
+      <div class="col-6">
+        <div class="form-floating mb-4">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            placeholder="Amount"
+            name="Amount"
+          />
+          <label for="floatingInput">Amount</label>
+        </div>
+      </div>
+      <!-- end input item  -->
+      <div class="col-6">
+        <div class="form-floating mb-4">
+          <input
+            type="date"
+            class="form-control"
+            id="floatingInput"
+            placeholder="Date"
+            name="expenseDate"
+          />
+          <label for="floatingInput">Date</label>
+        </div>
+      </div>
+      <!-- end input item  -->
+      <div class="col-6">
+        <select
+          class="form-select select_padding mb-4"
+          aria-label="Default select example"
+          name="category"
+        >
+          <option selected value="none">select category</option>
+          {% for data in categories %}
+          <option value="{{data.id}}">{{data.name}}</option>
+          {% empty %}
+          <option>N0 categories created</option>
+          {% endfor%}
+        </select>
+      </div>
+      <!-- end input item  -->
+      <div class="col-12">
+        <div class="mb-4">
+          <label for="exampleFormControlTextarea1" class="form-label"
+            >Description</label
+          >
+          <textarea
+            class="form-control"
+            id="exampleFormControlTextarea1"
+            rows="5"
+            name="description"
+          ></textarea>
+        </div>
+      </div>
+      <!-- end input item  -->
+      <div class="col-12">
+        <div class="mb-4">
+          <label for="formFile" class="form-label">Upload Receipt</label>
+          <input
+            class="form-control"
+            type="file"
+            id="formFile"
+            name="receipt"
+          />
+        </div>
+      </div>
+      <!-- end input item  -->
+    </div>
+
+    <center>
+      <button
+        type="submit"
+        name="submit_expense"
+        class="btn btn_submit my-5 py-3"
+      >
+        Submit Expense
+      </button>
+    </center>
+  </form>
+</div>
+
+{% endblock %}

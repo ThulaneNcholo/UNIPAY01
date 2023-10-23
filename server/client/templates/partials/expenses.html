@@ -1,0 +1,56 @@
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+</style>
+
+<div class="card_container shadow-sm px-3 py-4 col_sizes">
+  <h5 class="fw-bold mb-1">Overview</h5>
+  <p class="text-secondary mb-3">Monthly Earnings and Expenses</p>
+
+  <canvas id="expensesChart" style="width: 100%; max-width: 100%"></canvas>
+</div>
+
+<script>
+  // Sample data for "Monthly Earnings and Expenses" bar graph
+  const expensesChartData = JSON.parse("{{ barChart_json|escapejs }}");
+
+  // Initialize empty arrays for xValues, incomeValues, and expensesValues
+  const xValuesExpenses = [];
+  const incomeValuesExpenses = [];
+  const expensesValuesExpenses = [];
+
+  // Loop through the expensesChartData to populate xValues, incomeValues, and expensesValues
+  expensesChartData.forEach((data) => {
+    xValuesExpenses.push(data.month);
+    incomeValuesExpenses.push(data.total);
+    expensesValuesExpenses.push(data.expense);
+  });
+
+  new Chart("expensesChart", {
+    type: "bar",
+    data: {
+      labels: xValuesExpenses,
+      datasets: [
+        {
+          label: "Income",
+          backgroundColor: "#6470ef",
+          data: incomeValuesExpenses,
+        },
+        {
+          label: "Expenses",
+          backgroundColor: "#d9534f",
+          data: expensesValuesExpenses,
+        },
+      ],
+    },
+    options: {
+      legend: { display: true },
+      title: {
+        display: true,
+        text: "Monthly Earnings and Expenses",
+      },
+    },
+  });
+</script>

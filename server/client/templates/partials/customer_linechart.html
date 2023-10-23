@@ -1,0 +1,54 @@
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+</style>
+
+<div class="card_container shadow-sm px-3 py-4 col_sizes">
+  <h5 class="fw-bold mb-1">Customers onboarding</h5>
+  <p class="text-secondary mb-3">Monthly onboarding</p>
+
+  <canvas id="customers" style="width: 100%; max-width: 600px"></canvas>
+</div>
+
+<script>
+  // Parse the JSON data passed from Django for "Monthly Earnings" bar graph
+  const clientsData = JSON.parse("{{ clinetsGraph|escapejs }}");
+
+  // Initialize empty arrays for xValues and yValues
+  const customersxValues = [];
+  const customerYvalues = [];
+  const monthLabels = [];
+
+  // Loop through the clientsData to populate xValues and yValues
+  clientsData.forEach((data, index) => {
+    customersxValues.push(index);
+    customerYvalues.push(data.total);
+    monthLabels.push(data.month); // Assuming you have a getMonthName function
+  });
+
+  const maxCustomerYValue = Math.max(...customerYvalues);
+
+  new Chart("customers", {
+    type: "line",
+    data: {
+      labels: monthLabels, // Use the month labels as Y-axis labels
+      datasets: [
+        {
+          fill: true,
+          lineTension: 0,
+          backgroundColor: "#ebecfd",
+          borderColor: "#6470ef",
+          data: customerYvalues,
+        },
+      ],
+    },
+    options: {
+      legend: { display: false },
+      scales: {
+        yAxes: [{ ticks: { min: 0, max: maxCustomerYValue } }],
+      },
+    },
+  });
+</script>

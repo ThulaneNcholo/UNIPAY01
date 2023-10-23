@@ -1,0 +1,35 @@
+<style>
+  .subTotal_container {
+    background-color: var(--primary_color);
+    color: white;
+  }
+</style>
+
+<!-- ======= Sub Total  ======= -->
+<div class="row my-3">
+  <div class="col-6"></div>
+  <div class="col-6">
+    <div class="row subTotal_container py-3">
+      <div class="col">
+        <h6 class="fw-bold mb-0">Sub Total</h6>
+      </div>
+      <div class="col">
+        <h6 class="fw-bold mb-0" id="SubTotal">R{{subtotal}}</h6>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ======= Balance DUe  ======= -->
+<div class="row mt-3 mb-4">
+  <div class="col-6"></div>
+  <div class="col-6">
+    <div class="row subTotal_container py-3">
+      <div class="col">
+        <h6 class="fw-bold mb-0">Balance Due</h6>
+      </div>
+      <div class="col">
+        <h6 class="fw-bold mb-0" id="balanceDue">R{{total_due}}</h6>
+      </div>
+    </div>
+  </div>
+</div>

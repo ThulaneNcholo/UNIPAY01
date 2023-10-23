@@ -1,0 +1,48 @@
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+</style>
+
+<div class="card_container shadow-sm px-3 py-4 col_sizes">
+  <h5 class="fw-bold mb-1">Overview</h5>
+  <p class="text-secondary mb-3">Monthly Earnings</p>
+
+  <canvas id="myChart" style="width: 100%; max-width: 100%"></canvas>
+</div>
+
+<script>
+  // Parse the JSON data passed from Django for "Monthly Earnings" bar graph
+  const barChart = JSON.parse("{{ barChart_json|escapejs }}");
+
+  // Initialize empty arrays for xValues and yValues
+  const xValues = [];
+  const yValues = [];
+
+  // Loop through the barChart data to populate xValues and yValues
+  barChart.forEach((data) => {
+    xValues.push(data.month);
+    yValues.push(data.total);
+  });
+
+  new Chart("myChart", {
+    type: "bar",
+    data: {
+      labels: xValues,
+      datasets: [
+        {
+          backgroundColor: "#6470ef",
+          data: yValues,
+        },
+      ],
+    },
+    options: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: "Monthly Earnings",
+      },
+    },
+  });
+</script>

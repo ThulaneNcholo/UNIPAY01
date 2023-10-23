@@ -1,0 +1,176 @@
+<input
+  type="text"
+  value="{{clientValue}}"
+  name="clientValueInput"
+  hidden="true"
+/>
+<div class="row d-flex align-items-center mb-3">
+  <div class="col-3">
+    <p class="invoice_labels">Name</p>
+  </div>
+  <div class="col">
+    <input
+      type="text"
+      value="{{clientProfile.id}}"
+      name="customerID"
+      hidden="true"
+    />
+    <input
+      type="text"
+      class="form-control input_style"
+      aria-describedby="business name"
+      placeholder="Business name"
+      name="customerName"
+      value="{{clientProfile.company_name}}"
+    />
+  </div>
+</div>
+<!-- end input item  -->
+<div class="row d-flex align-items-center mb-3">
+  <div class="col-3">
+    <p class="invoice_labels">Email</p>
+  </div>
+  <div class="col">
+    <input
+      type="email"
+      class="form-control input_style"
+      aria-describedby="busines email"
+      placeholder="email@business.com"
+      name="customerEmail"
+      value="{{clientProfile.email}}"
+    />
+  </div>
+</div>
+<!-- end input item  -->
+<div class="row d-flex align-items-center mb-3">
+  <div class="col-3">
+    <p class="invoice_labels">Phone</p>
+  </div>
+  <div class="col">
+    <input
+      type="number"
+      class="form-control input_style"
+      aria-describedby="business phone"
+      placeholder="065 736 8937"
+      name="customerPhone"
+      value="{{clientProfile.phone}}"
+    />
+  </div>
+</div>
+<!-- end input item  -->
+<div class="row d-flex align-items-center mb-3">
+  <div class="col-3">
+    <p class="invoice_labels">Business #</p>
+  </div>
+  <div class="col">
+    <input
+      type="text"
+      class="form-control input_style"
+      aria-describedby="Registed Business Number"
+      placeholder="8743768343"
+      name="customerRegistered"
+      value="{{clientProfile.company_registered_number}}"
+    />
+  </div>
+</div>
+<!-- end input item  -->
+<div class="row d-flex align-items-center mb-3">
+  <div class="col-3">
+    <p class="invoice_labels">Address</p>
+  </div>
+  <div class="col">
+    <button class="btn btn_address" type="button" onclick="ToAddress()">
+      + address
+    </button>
+    <input
+      name="customerAddressValue"
+      type="text"
+      id="AddressTo"
+      value="No"
+      hidden="true"
+    />
+  </div>
+  <div class="mt-5" id="ToAddressID" style="display: none">
+    <div class="row d-flex align-items-center mb-3">
+      <div class="col-3">
+        <p class="invoice_labels">Street</p>
+      </div>
+      <div class="col">
+        <input
+          type="text"
+          class="form-control input_style"
+          aria-describedby="Business Street"
+          placeholder="3 Avenue"
+          name="customerStreet"
+          value="{{clientProfile.address.street}}"
+        />
+      </div>
+    </div>
+    <!-- end address input  -->
+    <div class="row d-flex align-items-center mb-3">
+      <div class="col-3">
+        <p class="invoice_labels">Suburb</p>
+      </div>
+      <div class="col">
+        <input
+          type="text"
+          class="form-control input_style"
+          aria-describedby="Business suburb"
+          placeholder="Mainbru"
+          name="customerSuburb"
+          value="{{clientProfile.address.suburb}}"
+        />
+      </div>
+    </div>
+    <!-- end address input  -->
+    <div class="row d-flex align-items-center mb-3">
+      <div class="col-3">
+        <p class="invoice_labels">City</p>
+      </div>
+      <div class="col">
+        <input
+          type="text"
+          class="form-control input_style"
+          aria-describedby="Business City"
+          placeholder="Brakpan"
+          name="customerCity"
+          value="{{clientProfile.address.city}}"
+        />
+      </div>
+    </div>
+    <!-- end address input  -->
+    <div class="row d-flex align-items-center mb-3">
+      <div class="col-3">
+        <p class="invoice_labels">Province</p>
+      </div>
+      <div class="col">
+        <input
+          type="text"
+          class="form-control input_style"
+          aria-describedby="Business Province"
+          placeholder="Guateng"
+          name="customerProvince"
+          value="{{clientProfile.address.province}}"
+        />
+      </div>
+    </div>
+    <!-- end address input  -->
+    <div class="row d-flex align-items-center mb-3">
+      <div class="col-3">
+        <p class="invoice_labels">PO BOX</p>
+      </div>
+      <div class="col">
+        <input
+          type="text"
+          class="form-control input_style"
+          aria-describedby="Business PO BOX"
+          placeholder="143"
+          name="customerPO"
+          value="{{clientProfile.address.pobox}}"
+        />
+      </div>
+    </div>
+    <!-- end address input  -->
+  </div>
+</div>
+<!-- end input item  -->

@@ -1,0 +1,55 @@
+<style>
+  /* category list style  */
+  .category_circle {
+    width: 40px; /* Set the desired width and height for the circle */
+    height: 40px;
+    background-color: var(
+      --background_color
+    ); /* Set the circle background color */
+    border-radius: 50%; /* Make it a circle by setting border-radius to 50% */
+    display: flex;
+    justify-content: center; /* Center the icon horizontally */
+    align-items: center; /* Center the icon vertically */
+    margin-right: 15px;
+  }
+
+  .category_icon {
+    font-size: 18px;
+    color: var(--primary_color);
+  }
+
+  .category_delete_btn {
+    background-color: transparent;
+    border: 0px;
+  }
+</style>
+
+{% for data in categories %}
+<div class="row mb-3">
+  <div class="col">
+    <div class="d-flex align-items-center">
+      <div class="category_circle">
+        <i class="bi bi-bookmark-check-fill category_icon"></i>
+      </div>
+      <div>
+        <p class="mb-0">{{data.name}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-2 d-flex justify-content-end">
+    <form method="POST">
+      {% csrf_token %}
+      <input type="text" name="categoryID" value="{{data.id}}" hidden="true" />
+      <button
+        class="category_delete_btn"
+        hx-post="{% url 'delete-category' %}"
+        hx-target="#categorylist"
+      >
+        <i class="bi bi-trash3-fill text-danger category_icon"></i>
+      </button>
+    </form>
+  </div>
+</div>
+{% empty %}
+<h6>You currently have no categories</h6>
+{% endfor%}

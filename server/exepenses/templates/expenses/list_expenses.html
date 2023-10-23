@@ -1,0 +1,232 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+{% block content %}
+
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+
+  .category_icon_list {
+    margin-right: 12px;
+    color: var(--primary_color);
+  }
+
+  /* category list style  */
+  .category_circle {
+    width: 40px; /* Set the desired width and height for the circle */
+    height: 40px;
+    background-color: var(
+      --background_color
+    ); /* Set the circle background color */
+    border-radius: 50%; /* Make it a circle by setting border-radius to 50% */
+    display: flex;
+    justify-content: center; /* Center the icon horizontally */
+    align-items: center; /* Center the icon vertically */
+    margin-right: 15px;
+  }
+
+  .category_icon {
+    font-size: 18px;
+    color: var(--primary_color);
+  }
+
+  .category_delete_btn {
+    background-color: transparent;
+    border: 0px;
+  }
+</style>
+
+<!-- ======= Messages Notification  ======= -->
+<div>
+  {% for message in messages %}
+  <div class="alert alert-success my-5" role="alert">{{message}}</div>
+  {% endfor %}
+</div>
+
+<!-- ======= List all Expenses ====== -->
+<div class="row">
+  <!-- Expenses Table  -->
+  <div class="col-8">
+    <div class="card_container shadow-sm px-3 py-4 col_sizes">
+      <div class="row d-flex align-items-center mb-4">
+        <div class="col">
+          <h5 class="fw-bold mb-0">All Expenses</h5>
+        </div>
+        <div class="col">
+          <a href="{% url 'add-expense'%}">
+            <button class="btn new_invoice_btn py-2 shadow-sm fw-bold">
+              <i class="bi bi-plus-circle-fill add_invoice_icon"></i> add
+              Expense
+            </button>
+          </a>
+        </div>
+      </div>
+      <!-- end header component  -->
+
+      <div class="row mb-4">
+        <div class="col-3">
+          <div class="input-group mb-3 search_main_container">
+            <span class="input-group-text search_container" id="basic-addon1"
+              ><i class="bi bi-search text-secondary"></i
+            ></span>
+            <input
+              type="text"
+              class="form-control search_bar"
+              placeholder="Expense No."
+              aria-label="Expense Number"
+              aria-describedby="basic-addon1"
+            />
+          </div>
+        </div>
+        <!-- end search item  -->
+        <div class="col-3">
+          <select
+            class="form-select sort_filter"
+            aria-label="Default select example"
+          >
+            <option selected>Sort By</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+        </div>
+      </div>
+      <!-- end search component  -->
+
+      <!-- ======= table heading  ====== -->
+      <div class="row mb-4">
+        <div class="col">
+          <p class="mb-0 table_headings">Expense</p>
+        </div>
+
+        <div class="col">
+          <p class="mb-0 table_headings">Category</p>
+        </div>
+        <div class="col">
+          <p class="mb-0 table_headings">Date</p>
+        </div>
+        <div class="col">
+          <p class="mb-0 table_headings">Amount</p>
+        </div>
+        <div class="col-1"></div>
+      </div>
+      <!-- end table headings  -->
+
+      <!-- ======= table data  ====== -->
+      {% for data in expenses%}
+      <div class="row mb-3">
+        <div class="col">
+          <p class="mb-0 text-secondary" style="font-size: 14px">
+            #{{data.ref}}
+          </p>
+          <p class="mb-0 fw-bold">{{data.name}}</p>
+        </div>
+
+        <div class="col">
+          <p class="mb-0">{{data.expense_category.name}}</p>
+        </div>
+        <div class="col">
+          <p class="mb-0">{{data.expenseDate}}</p>
+        </div>
+        <div class="col">
+          <p class="mb-0">R{{data.amount}}</p>
+        </div>
+        <div class="col-1">
+          <p class="mb-0 fw-bold">view</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  <!-- Categories Table  -->
+  <div class="col">
+    <div class="card_container shadow-sm px-3 py-4 col_sizes">
+      <div class="row d-flex align-items-center mb-4">
+        <div class="col">
+          <h5 class="fw-bold mb-0">Categories</h5>
+        </div>
+        <div class="col">
+          <button
+            class="btn new_invoice_btn py-2 shadow-sm fw-bold"
+            data-bs-toggle="modal"
+            data-bs-target="#categoryModal"
+          >
+            <i class="bi bi-plus-circle-fill add_invoice_icon"></i> add Category
+          </button>
+        </div>
+      </div>
+      <!-- end header component  -->
+
+      {% for data in categories %}
+      <div class="d-flex">
+        <i class="bi bi-arrow-right-circle-fill category_icon_list"></i>
+        <p>{{data.name}}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- ======= Category Modal ====== -->
+<div
+  class="modal fade"
+  id="categoryModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">All Categories</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body py-4">
+        <form method="POST" autocomplete="off">
+          {% csrf_token %}
+          <div class="row d-flex align-items-center mb-5">
+            <div class="col">
+              <div class="form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="floatingInput"
+                  placeholder="Category Name"
+                  name="categoryName"
+                  required
+                  value="none"
+                />
+                <label for="floatingInput">Category Name</label>
+              </div>
+            </div>
+            <div class="col-3">
+              <button
+                class="btn btn-success btn_submit_category"
+                hx-post="{% url 'add-category' %}"
+                hx-target="#categorylist"
+              >
+                submit
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- list category items  -->
+        <div id="categorylist">{% include 'partials/category_list.html' %}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+

@@ -1,0 +1,401 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+{% block content %}
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+
+  .invoice_labels {
+    margin-bottom: 0px;
+  }
+
+  .btn_address {
+    background-color: var(--primary_color);
+    color: var(--background_color);
+  }
+
+  .client_company_tag {
+    font-size: 14px;
+  }
+
+  .client_image {
+    font-size: 25px;
+  }
+
+  /* document actions  */
+  .document_btns {
+    width: 100%;
+  }
+
+  /* dcoument table styling  */
+  .document_table_headings {
+    background-color: var(--background_color);
+  }
+
+  .subTotal_container {
+    background-color: var(--primary_color);
+    color: white;
+  }
+</style>
+
+<form method="POST">
+  {% csrf_token %}
+  <!-- divider  -->
+  {% if methodtype == "Invoice" %}
+  <button class="btn btn_action mb-3" type="submit" name="submit_invoice">
+    create Invoice
+  </button>
+  {% elif methodtype == "Qoute" %}
+  <button class="btn btn_action mb-3" type="submit" name="submit_qoute">
+    create Qoute
+  </button>
+  {% endif %}
+  <div class="card_container shadow-sm px-3 py-4 mb-5">
+    <h4 class="mb-4 fw-bold">{{methodtype}}</h4>
+
+    <!-- ======= Invoice Number,issue date and due date  ======= -->
+    <div class="row mb-3">
+      <div class="col-6">
+        <div class="row d-flex align-items-center">
+          <div class="col-3">
+            <p class="invoice_labels">Invoice number</p>
+          </div>
+          <div class="col">
+            <input
+              type="text"
+              class="form-control input_style"
+              aria-describedby="invoice number"
+              value="{{ref}}"
+              name="ref"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end input Number  -->
+    <div class="row mb-3">
+      <div class="col-6">
+        <div class="row d-flex align-items-center">
+          <div class="col-3">
+            <p class="invoice_labels">Issue Date</p>
+          </div>
+          <div class="col">
+            <input
+              type="date"
+              id="dateInput"
+              class="form-control input_style"
+              aria-describedby="Due Date"
+              name="issueDate"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end input issue date  -->
+    <div class="row mb-5">
+      <div class="col-6">
+        <div class="row d-flex align-items-center">
+          <div class="col-3">
+            <p class="invoice_labels">Due Date</p>
+          </div>
+          <div class="col">
+            <input
+              type="date"
+              class="form-control input_style"
+              aria-describedby="Due Date"
+              name="dueDate"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end input due date  -->
+
+    <!-- ======= Document data  ======= -->
+    <div class="row mb-5">
+      <!-- ======= Company Details  ======= -->
+      <div class="col">
+        <div>
+          <div class="row mb-5">
+            <div class="col">
+              <h5 class="fw-bold mb-0">From</h5>
+            </div>
+            <div class="col d-flex justify-content-end">
+              <form method="POST">
+                {% csrf_token %}
+                <input
+                  type="text"
+                  value="{{company.ref}}"
+                  name="companyID"
+                  hidden="true"
+                />
+                <div class="row">
+                  <div class="col">
+                    <button
+                      class="btn btn_address"
+                      hx-post="{% url 'add-company-details'%}"
+                      hx-target="#companyData"
+                    >
+                      <i class="bi bi-plus-circle-fill"></i> company
+                    </button>
+                  </div>
+                  <div class="col">
+                    <button
+                      class="btn btn-dark"
+                      hx-post="{% url 'remove-company'%}"
+                      hx-target="#companyData"
+                    >
+                      <i class="bi bi-dash-circle-fill"></i> company
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Document from data  -->
+          <div id="companyData">
+            {% include 'documentForm/documentFrom.html' %}
+          </div>
+        </div>
+      </div>
+      <!-- ======= Customer Details  ======= -->
+      <div class="col">
+        <div>
+          <div class="row mb-5">
+            <div class="col">
+              <h5 class="fw-bold">To</h5>
+            </div>
+            <div class="col d-flex justify-content-end">
+              <form method="POST">
+                {% csrf_token %}
+
+                <div class="row">
+                  <div class="col">
+                    <button
+                      type="button"
+                      class="btn btn_address"
+                      data-bs-toggle="modal"
+                      data-bs-target="#clientList"
+                    >
+                      <i class="bi bi-plus-circle-fill"></i> client
+                    </button>
+                  </div>
+                  <div class="col">
+                    <input
+                      type="text"
+                      value="{{company.ref}}"
+                      name="companyID"
+                      hidden="true"
+                    />
+                    <button
+                      class="btn btn-dark"
+                      hx-post="{% url 'remove-customer-document'%}"
+                      hx-target="#ClientDocuments"
+                    >
+                      <i class="bi bi-dash-circle-fill"></i> client
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Client List Modal -->
+          <div
+            class="modal fade"
+            id="clientList"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Clients</h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  {% for data in clients %}
+                  <div class="row mb-3">
+                    <div class="col-2">
+                      <i class="bi bi-person-circle client_image"></i>
+                    </div>
+                    <div class="col">
+                      <p class="mb-0">{{data.firstName}} {{data.lastName}}</p>
+                      <p class="mb-0 client_company_tag text-secondary">
+                        {{data.company_name}}
+                      </p>
+                    </div>
+                    <div class="col-3 d-flex justify-content-end">
+                      <form method="POST">
+                        {% csrf_token %}
+                        <input
+                          type="text"
+                          value="{{data.id}}"
+                          name="clientID"
+                          hidden="true"
+                        />
+                        <button
+                          class="btn btn-dark"
+                          type="submit"
+                          hx-post="{% url 'add-customer-document'%}"
+                          hx-target="#ClientDocuments"
+                        >
+                          select
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Clinet Documents data -->
+          <div id="ClientDocuments">
+            {% include 'documentForm/documentTo.html' %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======= Document Actions  ======= -->
+    <div class="row d-flex justify-content-end mb-5">
+      <div class="col-6">
+        <div class="row">
+          <div class="col">
+            <button
+              type="button"
+              class="btn btn-outline-dark document_btns"
+              data-bs-toggle="modal"
+              data-bs-target="#documentInventory"
+            >
+              <i class="bi bi-plus-circle-fill"></i> Inventory
+            </button>
+
+            <!-- ======= Inventory Modal  ======= -->
+            {% include 'documentActions/inventoryDocument.html' %}
+          </div>
+          <div class="col">
+            <button
+              type="button"
+              class="btn btn-outline-dark document_btns"
+              data-bs-toggle="modal"
+              data-bs-target="#documentServices"
+            >
+              <i class="bi bi-plus-circle-fill"></i> Service
+            </button>
+
+            <!-- ======= Service Modal  ======= -->
+            {% include 'documentActions/serviceDocument.html' %}
+          </div>
+          <div class="col">
+            <button class="btn btn-outline-dark document_btns" type="button">
+              <i class="bi bi-plus-circle-fill"></i> Row
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======= Table Start  ======= -->
+    <div>
+      <!-- ======= Table Headings  ======= -->
+      <div class="row document_table_headings py-3 mx-0 mb-3">
+        <div class="col">
+          <h6 class="fw-bold mb-0">Item</h6>
+        </div>
+        <div class="col">
+          <h6 class="fw-bold mb-0">Description</h6>
+        </div>
+        <div class="col">
+          <h6 class="fw-bold mb-0">Qty</h6>
+        </div>
+        <div class="col">
+          <h6 class="fw-bold mb-0">Type</h6>
+        </div>
+        <div class="col">
+          <h6 class="fw-bold mb-0">Price</h6>
+        </div>
+        <div class="col">
+          <h6 class="fw-bold mb-0">Total</h6>
+        </div>
+        <div class="col-1">
+          <h6 class="fw-bold mb-0">Remove</h6>
+        </div>
+      </div>
+
+      <!-- ======= Table Row Start  ======= -->
+      <div id="documentRow">{% include 'partials/documentTableRow.html' %}</div>
+    </div>
+
+    <!-- ======= Notes  ======= -->
+    <div class="mb-5">
+      <label for="exampleFormControlTextarea1" class="form-label">Notes</label>
+      <textarea
+        class="form-control"
+        id="exampleFormControlTextarea1"
+        rows="4"
+        name="notes"
+      ></textarea>
+    </div>
+
+    <!-- ======= Invoice Bank  ======= -->
+    <h5 class="fw-bold my-5">Payment information:</h5>
+    <div id="invoiceBank">
+      {% include 'customerTransactions/invoiceBank.html' %}
+    </div>
+  </div>
+</form>
+
+<script>
+  const dateInput = document.getElementById("dateInput");
+
+  // Create a new Date object representing today's date
+  const today = new Date();
+
+  // Format the date as "YYYY-MM-DD"
+  const formattedDate = today.toISOString().split("T")[0];
+
+  // Set the value of the date input field
+  dateInput.value = formattedDate;
+
+  function fromAddress() {
+    const addressDiv = document.getElementById("fromAddressID");
+    const addressFromValue = document.getElementById("AddressFrom");
+
+    if (addressDiv.style.display == "none") {
+      addressDiv.style.display = "block";
+      addressFromValue.value = "Yes";
+    } else {
+      addressDiv.style.display = "none";
+      addressFromValue.value = "No";
+    }
+  }
+
+  function ToAddress() {
+    const addressDiv = document.getElementById("ToAddressID");
+    const addressFromValue = document.getElementById("AddressTo");
+
+    if (addressDiv.style.display == "none") {
+      addressDiv.style.display = "block";
+      addressFromValue.value = "Yes";
+    } else {
+      addressDiv.style.display = "none";
+      addressFromValue.value = "No";
+    }
+  }
+</script>
+
+{% endblock %}

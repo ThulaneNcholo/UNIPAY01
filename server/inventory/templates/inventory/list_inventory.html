@@ -1,0 +1,484 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+{% block content %}
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+
+  /* Client Widgets  */
+  .card_container {
+    background-color: white;
+    border-radius: 15px;
+  }
+
+  .company_card {
+    background-color: var(--primary_color);
+    border-radius: 15px;
+  }
+
+  .circle {
+    width: 50px; /* Set the desired width and height for the circle */
+    height: 50px;
+    background-color: var(
+      --primary_color
+    ); /* Set the circle background color */
+    border-radius: 50%; /* Make it a circle by setting border-radius to 50% */
+    display: flex;
+    justify-content: center; /* Center the icon horizontally */
+    align-items: center; /* Center the icon vertically */
+    margin-right: 15px;
+  }
+
+  .icon_style {
+    font-size: 23px;
+    color: white;
+  }
+
+  /* Table style  */
+
+  .table_headings {
+    color: grey;
+    font-size: 18px;
+  }
+
+  .table_line {
+    color: lightgray;
+  }
+
+  .btn_action {
+    background-color: var(--primary_color);
+    color: white;
+    border-radius: 15px;
+  }
+
+  .table_action {
+    color: var(--primary_color);
+    font-size: 22px;
+  }
+
+  .table_action:hover {
+    color: orangered;
+    cursor: pointer;
+  }
+
+  .new_invoice_btn {
+    background-color: var(--primary_color);
+    color: var(--background_color);
+    width: 100%;
+    border-radius: 15px;
+  }
+
+  .add_invoice_icon {
+    font-size: 22px;
+    margin-right: 20px;
+  }
+
+  .search_container {
+    background-color: var(--background_color);
+    border: 0px;
+    border-bottom-left-radius: 15px;
+    border-top-left-radius: 15px;
+  }
+
+  .search_bar {
+    background-color: var(--background_color);
+    border: 0px;
+    border-bottom-right-radius: 15px;
+    border-top-right-radius: 15px;
+  }
+
+  .sort_filter {
+    background-color: var(--background_color);
+    border: 0px;
+    border-radius: 15px;
+  }
+
+  .category_btn_add {
+    width: 100%;
+    border-radius: 15px;
+  }
+
+  .btn_submit_category {
+    width: 100%;
+    border-radius: 15px;
+    padding: 1rem 0.75rem;
+  }
+
+  /* category list style  */
+  .category_circle {
+    width: 40px; /* Set the desired width and height for the circle */
+    height: 40px;
+    background-color: var(
+      --background_color
+    ); /* Set the circle background color */
+    border-radius: 50%; /* Make it a circle by setting border-radius to 50% */
+    display: flex;
+    justify-content: center; /* Center the icon horizontally */
+    align-items: center; /* Center the icon vertically */
+    margin-right: 15px;
+  }
+
+  .category_icon {
+    font-size: 18px;
+    color: var(--primary_color);
+  }
+
+  .category_delete_btn {
+    background-color: transparent;
+    border: 0px;
+  }
+</style>
+
+<!-- ======= Messages Notification  ======= -->
+<div>
+  {% for message in messages %}
+  <div class="alert alert-success my-5" role="alert">{{message}}</div>
+  {% endfor %}
+</div>
+
+<!-- ======= Client Widgets ====== -->
+<div class="row mb-5">
+  <div class="col">
+    <div class="card_container shadow-sm d-flex align-items-center px-3 py-4">
+      <div class="circle">
+        <i class="bi bi-box-seam-fill icon_style"></i>
+      </div>
+      <div>
+        <h5 class="mb-1 widget_heading">Inventory</h5>
+        <h5 class="mb-0 fw-bold">{{inventoryCount}}</h5>
+      </div>
+    </div>
+  </div>
+  <!-- end col item  -->
+  <div class="col">
+    <div class="card_container shadow-sm d-flex align-items-center px-3 py-4">
+      <div class="circle">
+        <i class="bi bi-boxes icon_style"></i>
+      </div>
+      <div>
+        <h5 class="mb-1 widget_heading">Low Stock</h5>
+        <h5 class="mb-0 fw-bold text-danger">{{lowStock}}</h5>
+      </div>
+    </div>
+  </div>
+  <!-- end col item  -->
+  <div class="col">
+    <div class="card_container shadow-sm d-flex align-items-center px-3 py-4">
+      <div class="circle">
+        <i class="bi bi-box2 icon_style"></i>
+      </div>
+      <div>
+        <h5 class="mb-1 widget_heading">Out Stock</h5>
+        <h5 class="mb-0 fw-bold text-danger">{{outStock}}</h5>
+      </div>
+    </div>
+  </div>
+  <!-- end col item  -->
+  <div class="col">
+    <div class="card_container shadow-sm d-flex align-items-center px-3 py-4">
+      <div class="circle">
+        <i class="bi bi-gear-fill icon_style"></i>
+      </div>
+      <div>
+        <h5 class="mb-1 widget_heading">Services</h5>
+        <h5 class="mb-0 fw-bold">{{servicesCount}}</h5>
+      </div>
+    </div>
+  </div>
+  <!-- end col item  -->
+</div>
+
+<!-- ======= Inventory Table ====== -->
+<div class="card_container shadow-sm px-3 py-4 mb-5">
+  <div class="row mb-5 d-flex align-items-center">
+    <div class="col">
+      <h5 class="fw-bold">All Inventory</h5>
+    </div>
+    <div class="col">
+      <div class="row">
+        <div class="col">
+          <a href="{% url 'add-inventory'%}">
+            <button class="btn new_invoice_btn py-2 shadow-sm fw-bold">
+              <i class="bi bi-plus-circle-fill add_invoice_icon"></i> add
+              Inventory
+            </button>
+          </a>
+        </div>
+        <div class="col">
+          <button
+            type="button"
+            class="btn btn-outline-dark category_btn_add"
+            data-bs-toggle="modal"
+            data-bs-target="#categoryModal"
+          >
+            <i class="bi bi-bookmarks-fill add_invoice_icon"></i>
+            Categories
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-3">
+      <div class="input-group mb-3 search_main_container">
+        <span class="input-group-text search_container" id="basic-addon1"
+          ><i class="bi bi-search text-secondary"></i
+        ></span>
+        <input
+          type="text"
+          class="form-control search_bar"
+          placeholder="Inventory No."
+          aria-label="Invoice Number"
+          aria-describedby="basic-addon1"
+        />
+      </div>
+    </div>
+    <!-- end search item  -->
+    <div class="col-3">
+      <select
+        class="form-select sort_filter"
+        aria-label="Default select example"
+      >
+        <option selected>Sort By</option>
+        <option value="1">One</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- ======= table row start  ====== -->
+  <div class="row mb-4">
+    <div class="col">
+      <p class="mb-0 table_headings">Inventory No.</p>
+    </div>
+    <div class="col">
+      <p class="mb-0 table_headings">Name</p>
+    </div>
+    <div class="col">
+      <p class="mb-0 table_headings">Category</p>
+    </div>
+    <div class="col">
+      <p class="mb-0 table_headings">Qty</p>
+    </div>
+    <div class="col">
+      <p class="mb-0 table_headings">Price</p>
+    </div>
+    <div class="col">
+      <center>
+        <p class="mb-0 table_headings">Actions</p>
+      </center>
+    </div>
+  </div>
+  <hr class="table_line" />
+  <!-- end headings  -->
+
+  {% for data in inventory %}
+  <div class="row mb-3">
+    <div class="col">
+      <p class="mb-0">#{{data.ref}}</p>
+    </div>
+    <div class="col">
+      <p class="mb-0">{{data.name}}</p>
+    </div>
+    <div class="col">
+      <p class="mb-0">{{data.category.name}}</p>
+    </div>
+    <div class="col">
+      <p class="mb-0">{{data.quantity}}</p>
+    </div>
+    <div class="col">
+      <p class="mb-0">R{{data.sellingprice}}</p>
+    </div>
+    <div class="col">
+      <center>
+        <a href="{% url 'inventory-view' data.id %}">
+          <button class="btn btn-dark">view</button>
+        </a>
+      </center>
+    </div>
+  </div>
+  <hr class="table_line" />
+  {% endfor %}
+  <!-- end table row  -->
+</div>
+
+<!-- ======= Service Table ====== -->
+<div class="card_container shadow-sm px-3 py-4 mb-5">
+  <div class="row mb-5 d-flex align-items-center">
+    <div class="col">
+      <h5 class="fw-bold">All Services</h5>
+    </div>
+    <div class="col">
+      <div class="row">
+        <div class="col">
+          <a href="{% url 'add-service' %}">
+            <button class="btn new_invoice_btn py-2 shadow-sm fw-bold">
+              <i class="bi bi-plus-circle-fill add_invoice_icon"></i> add
+              Services
+            </button>
+          </a>
+        </div>
+        <div class="col">
+          <button
+            type="button"
+            class="btn btn-outline-dark category_btn_add"
+            data-bs-toggle="modal"
+            data-bs-target="#categoryModal"
+          >
+            <i class="bi bi-bookmarks-fill add_invoice_icon"></i>
+            Categories
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-3">
+      <div class="input-group mb-3 search_main_container">
+        <span class="input-group-text search_container" id="basic-addon1"
+          ><i class="bi bi-search text-secondary"></i
+        ></span>
+        <input
+          type="text"
+          class="form-control search_bar"
+          placeholder="Service No."
+          aria-label="Service Number"
+          aria-describedby="basic-addon1"
+        />
+      </div>
+    </div>
+    <!-- end search item  -->
+    <div class="col-3">
+      <select
+        class="form-select sort_filter"
+        aria-label="Default select example"
+      >
+        <option selected>Sort By</option>
+        <option value="1">One</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- ======= table row start  ====== -->
+  <div class="row mb-4">
+    <div class="col">
+      <p class="mb-0 table_headings">Service No.</p>
+    </div>
+    <div class="col">
+      <p class="mb-0 table_headings">Name</p>
+    </div>
+    <div class="col">
+      <p class="mb-0 table_headings">Description</p>
+    </div>
+    <div class="col">
+      <p class="mb-0 table_headings">Category</p>
+    </div>
+    <div class="col">
+      <p class="mb-0 table_headings">Price</p>
+    </div>
+    <div class="col">
+      <center>
+        <p class="mb-0 table_headings">Actions</p>
+      </center>
+    </div>
+  </div>
+  <hr class="table_line" />
+  <!-- end headings  -->
+
+  {% for data in services %}
+  <div class="row mb-3">
+    <div class="col">
+      <p class="mb-0">#{{data.ref}}</p>
+    </div>
+    <div class="col">
+      <p class="mb-0">{{data.name}}</p>
+    </div>
+    <div class="col">
+      <p class="mb-0">{{data.description}}</p>
+    </div>
+    <div class="col">
+      <p class="mb-0">{{data.category.name}}</p>
+    </div>
+    <div class="col">
+      <p class="mb-0">R{{data.serviceFee}}</p>
+    </div>
+
+    <div class="col">
+      <center>
+        <a href="{% url 'service-view' data.id %}">
+          <button class="btn btn-dark">view</button>
+        </a>
+      </center>
+    </div>
+  </div>
+  <hr class="table_line" />
+  {% endfor %}
+  <!-- end table row  -->
+</div>
+
+<!-- ======= Category Modal ====== -->
+<div
+  class="modal fade"
+  id="categoryModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">All Categories</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body py-4">
+        <form method="POST" autocomplete="off">
+          {% csrf_token %}
+          <div class="row d-flex align-items-center mb-5">
+            <div class="col">
+              <div class="form-floating">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="floatingInput"
+                  placeholder="Category Name"
+                  name="categoryName"
+                  required
+                  value="none"
+                />
+                <label for="floatingInput">Category Name</label>
+              </div>
+            </div>
+            <div class="col-3">
+              <button
+                class="btn btn-success btn_submit_category"
+                hx-post="{% url 'add-category' %}"
+                hx-target="#categorylist"
+              >
+                submit
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- list category items  -->
+        <div id="categorylist">{% include 'partials/category_list.html' %}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

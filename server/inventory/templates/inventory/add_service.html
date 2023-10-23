@@ -1,0 +1,127 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+{% block content %}
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+
+  .select_padding {
+    padding: 1rem 0.75rem;
+  }
+
+  .btn_submit {
+    width: 70%;
+    border-radius: 15px;
+    background-color: var(--primary_color);
+    color: var(--background_color);
+  }
+
+  .btn_new_category {
+    border-radius: 15px;
+    background-color: var(--primary_color);
+    color: var(--background_color);
+    padding: 1rem 0.75rem;
+    font-weight: 700;
+  }
+
+  .auto_label {
+    color: var(--primary_color);
+    font-weight: bold;
+  }
+</style>
+
+<form method="POST">
+  {% csrf_token %}
+  <div class="card_container shadow-sm px-3 py-4">
+    <h5 class="fw-bold mb-5">Add Service</h5>
+    <!-- Referance  -->
+    <div class="row">
+      <div class="col-6" id="targetDiv">
+        <div class="form-floating">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            placeholder="Item Referrance"
+            name="Referrance"
+            value="{{ref}}"
+          />
+          <label for="floatingInput">Service Referrance</label>
+        </div>
+      </div>
+      <div class="col-6">
+        <select
+          class="form-select select_padding"
+          aria-label="Default select example"
+          name="category"
+        >
+          <option selected value="none">select category</option>
+          {% for data in categories %}
+          <option value="{{data.id}}">{{data.name}}</option>
+          {% empty %}
+          <option>N0 categories created</option>
+          {% endfor%}
+        </select>
+      </div>
+    </div>
+    <div id="passwordHelpBlock" class="form-text mb-4">
+      You can edit service reference code
+    </div>
+
+    <div class="row">
+      <div class="col-6">
+        <div class="form-floating mb-4">
+          <input
+            type="text"
+            class="form-control"
+            id="floatingInput"
+            placeholder="Service Name"
+            name="serviceName"
+          />
+          <label for="floatingInput">Service Name</label>
+        </div>
+      </div>
+      <!-- end form item  -->
+      <div class="col-6">
+        <div class="form-floating mb-4">
+          <input
+            type="number"
+            class="form-control"
+            id="floatingInput"
+            placeholder="Service Fee"
+            name="price"
+          />
+          <label for="floatingInput">Service Fee</label>
+        </div>
+      </div>
+      <!-- end form item  -->
+
+      <div class="col-12">
+        <div class="mb-4">
+          <label for="exampleFormControlTextarea1" class="form-label"
+            >Service description</label
+          >
+          <textarea
+            class="form-control text-secondary"
+            id="exampleFormControlTextarea1"
+            rows="5"
+            name="description"
+          >Write description here</textarea
+          >
+        </div>
+      </div>
+      <!-- end form item  -->
+    </div>
+    <center>
+      <button class="btn btn_submit py-3 my-5" type="submit" name="add_service">
+        submit service
+      </button>
+    </center>
+  </div>
+</form>
+
+{% endblock %}

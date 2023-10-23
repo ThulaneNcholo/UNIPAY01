@@ -1,0 +1,292 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+{% block content %}
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+
+  .invoice_labels {
+    margin-bottom: 0px;
+    margin-right: 20px;
+  }
+
+  .input_style {
+    width: 100%;
+  }
+
+  .btn_address {
+    background-color: var(--primary_color);
+    color: var(--background_color);
+  }
+
+  .qty_input_stle {
+    border-color: lightgray;
+  }
+
+  .subTotal_container {
+    background-color: var(--primary_color);
+    color: white;
+  }
+
+  .btn_submit_invoice {
+    background-color: var(--primary_color);
+    border-radius: 15px;
+    color: white;
+  }
+
+  .add_client_icon {
+    color: var(--primary_color);
+    font-size: 22px;
+  }
+
+  /* client style modal  */
+  .client_image {
+    font-size: 25px;
+  }
+
+  .client_company_tag {
+    font-size: 14px;
+  }
+
+  .company_logo {
+    height: 150px;
+    width: 100%;
+    object-fit: contain;
+  }
+</style>
+
+<i class="bi bi-arrow-left-square-fill back_arrow" onclick="history.back()"></i>
+<form method="POST">
+  {% csrf_token %}
+  <!-- divider  -->
+  {% if methodtype == "Invoice" %}
+  <button
+    class="btn btn_submit_invoice my-4 px-5"
+    type="submit"
+    name="submit_invoice"
+  >
+    create Invoice
+  </button>
+  {% elif methodtype == "Qoute" %}
+  <button
+    class="btn btn_submit_invoice my-4 px-5"
+    type="submit"
+    name="submit_qoute"
+  >
+    create Quote
+  </button>
+  {% endif %}
+  <!-- end  -->
+
+  <div class="card_container shadow-sm px-3 py-4">
+    <div class="row d-flex justify-content-end mb-3">
+      <div class="col-6">
+        {% if company.logo %}
+        <img src="{{company.logo.url}}" alt="" class="company_logo" />
+        {% endif %}
+      </div>
+    </div>
+    <h4 class="mb-4 fw-bold">{{methodtype}}</h4>
+
+    <!-- invoice Referance  -->
+    <div class="row">
+      <div class="col-6">
+        <div class="row d-flex align-items-center mb-3">
+          <div class="col-3">
+            <p class="invoice_labels">{{methodtype}} number</p>
+          </div>
+          <div class="col">
+            <input
+              type="text"
+              class="form-control input_style"
+              aria-describedby="invoice number"
+              value="{{ref}}"
+              name="ref"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end input item  -->
+
+    <div class="row">
+      <div class="col-6">
+        <div class="row d-flex align-items-center mb-3">
+          <div class="col-3">
+            <p class="invoice_labels">Date</p>
+          </div>
+          <div class="col">
+            <input
+              type="date"
+              id="dateInput"
+              class="form-control input_style"
+              aria-describedby="Due Date"
+              name="issueDate"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end input item  -->
+
+    <div class="row mb-5">
+      <div class="col-6">
+        <div class="row d-flex align-items-center">
+          <div class="col-3">
+            <p class="invoice_labels">Due Date</p>
+          </div>
+          <div class="col">
+            <input
+              type="date"
+              class="form-control input_style"
+              aria-describedby="Due Date"
+              name="dueDate"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end input due date  -->
+
+    <div class="row">
+      <!-- ======= Company Details  ======= -->
+      <div class="col">
+        <div>
+          <h5 class="fw-bold mb-0">From</h5>
+          <!-- Document from data  -->
+          <div id="companyData">
+            {% include 'documentForm/documentFrom.html' %}
+          </div>
+          <!-- end input item  -->
+        </div>
+      </div>
+      <!-- ======= Client Details  ======= -->
+      <div class="col">
+        <div>
+          <div class="row mb-5">
+            <div class="col">
+              <h5 class="fw-bold">To</h5>
+            </div>
+            <div class="col d-flex justify-content-end">
+              <form method="POST">
+                {% csrf_token %}
+
+                <div class="row">
+                  <div class="col">
+                    <button
+                      type="button"
+                      class="btn btn_address"
+                      data-bs-toggle="modal"
+                      data-bs-target="#clientList"
+                    >
+                      <i class="bi bi-plus-circle-fill"></i> client
+                    </button>
+                  </div>
+                  <div class="col">
+                    <input
+                      type="text"
+                      value="{{company.ref}}"
+                      name="companyID"
+                      hidden="true"
+                    />
+                    <button
+                      class="btn btn-dark"
+                      hx-post="{% url 'remove-customer-document'%}"
+                      hx-target="#ClientDocuments"
+                    >
+                      <i class="bi bi-dash-circle-fill"></i> client
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Client List Modal -->
+          <div
+            class="modal fade"
+            id="clientList"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Clients</h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  {% for data in clients %}
+                  <div class="row mb-3">
+                    <div class="col-2">
+                      <i class="bi bi-person-circle client_image"></i>
+                    </div>
+                    <div class="col">
+                      <p class="mb-0">{{data.firstName}} {{data.lastName}}</p>
+                      <p class="mb-0 client_company_tag text-secondary">
+                        {{data.company_name}}
+                      </p>
+                    </div>
+                    <div class="col-3 d-flex justify-content-end">
+                      <form method="POST">
+                        {% csrf_token %}
+                        <input
+                          type="text"
+                          value="{{data.id}}"
+                          name="clientID"
+                          hidden="true"
+                        />
+                        <button
+                          class="btn btn-dark"
+                          type="submit"
+                          hx-post="{% url 'add-customer-document'%}"
+                          hx-target="#ClientDocuments"
+                        >
+                          select
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Clinet Documents data -->
+          <div id="ClientDocuments">
+            {% include 'documentForm/documentTo.html' %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    
+  </div>
+</form>
+
+<script>
+  const dateInput = document.getElementById("dateInput");
+
+  // Create a new Date object representing today's date
+  const today = new Date();
+
+  // Format the date as "YYYY-MM-DD"
+  const formattedDate = today.toISOString().split("T")[0];
+
+  // Set the value of the date input field
+  dateInput.value = formattedDate;
+</script>
+
+{% endblock %}

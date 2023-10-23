@@ -1,0 +1,170 @@
+<input
+  type="text"
+  value="{{companyValue}}"
+  name="companyValueInput"
+  hidden="true"
+/>
+<div class="row d-flex align-items-center mb-3">
+  <div class="col-3">
+    <p class="invoice_labels">Name</p>
+  </div>
+  <div class="col">
+    <input
+      type="text"
+      class="form-control input_style"
+      aria-describedby="business name"
+      placeholder="Business name"
+      name="businessName"
+      value="{{companyData.companyInfo.name}}"
+    />
+  </div>
+</div>
+<!-- end input item  -->
+<div class="row d-flex align-items-center mb-3">
+  <div class="col-3">
+    <p class="invoice_labels">Email</p>
+  </div>
+  <div class="col">
+    <input
+      type="email"
+      class="form-control input_style"
+      aria-describedby="busines email"
+      placeholder="email@business.com"
+      name="businessEmail"
+      value="{{companyData.companyInfo.email}}"
+    />
+  </div>
+</div>
+<!-- end input item  -->
+<div class="row d-flex align-items-center mb-3">
+  <div class="col-3">
+    <p class="invoice_labels">Phone</p>
+  </div>
+  <div class="col">
+    <input
+      type="number"
+      class="form-control input_style"
+      aria-describedby="business phone"
+      placeholder="065 736 8937"
+      name="businessPhone"
+      value="{{companyData.companyInfo.phone}}"
+    />
+  </div>
+</div>
+<!-- end input item  -->
+<div class="row d-flex align-items-center mb-3">
+  <div class="col-3">
+    <p class="invoice_labels">Business #</p>
+  </div>
+  <div class="col">
+    <input
+      type="text"
+      class="form-control input_style"
+      aria-describedby="Registed Business Number"
+      placeholder="8743768343"
+      name="businessRegisted"
+      value="{{companyData.companyInfo.registration}}"
+    />
+  </div>
+</div>
+<!-- end input item  -->
+<div class="row d-flex align-items-center mb-3">
+  <div class="col-3">
+    <p class="invoice_labels">Address</p>
+  </div>
+  <div class="col">
+    <button class="btn btn_address" type="button" onclick="fromAddress()">
+      + address
+    </button>
+    <input
+      name="businessAddressValue"
+      type="text"
+      id="AddressFrom"
+      value="No"
+      hidden="true"
+    />
+  </div>
+  <div class="mt-5" id="fromAddressID" style="display: none">
+    <div class="row d-flex align-items-center mb-3">
+      <div class="col-3">
+        <p class="invoice_labels">Street</p>
+      </div>
+      <div class="col">
+        <input
+          type="text"
+          class="form-control input_style"
+          aria-describedby="Business Street"
+          placeholder="3 Avenue"
+          name="businessStreet"
+          value="{{companyData.address.street}}"
+        />
+      </div>
+    </div>
+    <!-- end address input  -->
+    <div class="row d-flex align-items-center mb-3">
+      <div class="col-3">
+        <p class="invoice_labels">Suburb</p>
+      </div>
+      <div class="col">
+        <input
+          type="text"
+          class="form-control input_style"
+          aria-describedby="Business suburb"
+          placeholder="Mainbru"
+          name="businessSuburb"
+          value="{{companyData.address.suburb}}"
+        />
+      </div>
+    </div>
+    <!-- end address input  -->
+    <div class="row d-flex align-items-center mb-3">
+      <div class="col-3">
+        <p class="invoice_labels">City</p>
+      </div>
+      <div class="col">
+        <input
+          type="text"
+          class="form-control input_style"
+          aria-describedby="Business City"
+          placeholder="Brakpan"
+          name="businessCity"
+          value="{{companyData.address.city}}"
+        />
+      </div>
+    </div>
+    <!-- end address input  -->
+    <div class="row d-flex align-items-center mb-3">
+      <div class="col-3">
+        <p class="invoice_labels">Province</p>
+      </div>
+      <div class="col">
+        <input
+          type="text"
+          class="form-control input_style"
+          aria-describedby="Business Province"
+          placeholder="Guateng"
+          name="businessProvince"
+          value="{{companyData.address.province}}"
+        />
+      </div>
+    </div>
+    <!-- end address input  -->
+    <div class="row d-flex align-items-center mb-3">
+      <div class="col-3">
+        <p class="invoice_labels">PO BOX</p>
+      </div>
+      <div class="col">
+        <input
+          type="text"
+          class="form-control input_style"
+          aria-describedby="Business PO BOX"
+          placeholder="143"
+          name="businesPO"
+          value="{{companyData.address.pobox}}"
+        />
+      </div>
+    </div>
+    <!-- end address input  -->
+  </div>
+</div>
+<!-- end input item  -->

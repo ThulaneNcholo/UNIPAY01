@@ -1,0 +1,207 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+{% block content %}
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+
+  .todo_card {
+    background-color: var(--background_color);
+    border-radius: 12px;
+  }
+
+  .complete {
+    text-decoration: line-through;
+  }
+</style>
+
+<div class="card_container shadow-sm px-3 py-4">
+  <div class="row mb-5">
+    <div class="col">
+      <h5 class="fw-bold mb-0">Todo's</h5>
+    </div>
+    <div class="col d-flex justify-content-end">
+      <button
+        class="btn btn_action"
+        data-bs-toggle="modal"
+        data-bs-target="#todoModal"
+      >
+        <i class="bi bi-plus-circle-fill" style="margin-right: 12px"></i>add
+        todo
+      </button>
+    </div>
+  </div>
+
+  {% for data in todos %}
+  <!-- divider  -->
+  {% if data.status == "Pending" %}
+  <div class="todo_card p-3 mb-3">
+    <h6 class="fw-bold">{{data.title}}</h6>
+    <p class="text-secondary mb-3">{{data.todo}}</p>
+    <p class="fw-bold">Due : {{data.dueDate}}</p>
+    <div class="row">
+      <div class="col"></div>
+      <div class="col d-flex justify-content-end">
+        <div class="d-flex">
+          <button
+            class="btn btn-dark"
+            data-bs-toggle="modal"
+            data-bs-target="#editTodo{{data.id}}"
+          >
+            Edit
+          </button>
+          <form method="POST">
+            {% csrf_token %}
+            <input
+              type="text"
+              value="{{data.id}}"
+              name="todoID"
+              hidden="true"
+            />
+            <button
+              class="btn btn-dark mx-3"
+              type="submit"
+              name="complete_todo"
+            >
+              Complete
+            </button>
+            <button class="btn btn-dark" type="submit" name="delete_todo">
+              Delete
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- ======= Edit todo  ======= -->
+    {% include 'partials/edit_todo.html' %}
+  </div>
+  {% else %}
+  <div class="todo_card p-3 mb-3">
+    <div class="row">
+      <div class="col"></div>
+      <div class="col d-flex justify-content-end">
+        <i
+          class="bi bi-check-circle-fill text-success"
+          style="font-size: 20px"
+        ></i>
+      </div>
+    </div>
+    <h6 class="fw-bold complete">{{data.title}}</h6>
+    <p class="text-secondary mb-3 complete">{{data.todo}}</p>
+    <p class="fw-bold complete">Due : {{data.dueDate}}</p>
+    <div class="row">
+      <div class="col"></div>
+      <div class="col d-flex justify-content-end">
+        <div class="d-flex">
+          <button
+            class="btn btn-dark"
+            data-bs-toggle="modal"
+            data-bs-target="#editTodo{{data.id}}"
+          >
+            Edit
+          </button>
+          <form method="POST">
+            {% csrf_token %}
+            <input
+              type="text"
+              value="{{data.id}}"
+              name="todoID"
+              hidden="true"
+            />
+            <button
+              class="btn btn-dark mx-3"
+              type="submit"
+              name="complete_todo"
+            >
+              Complete
+            </button>
+            <button class="btn btn-dark" type="submit" name="delete_todo">
+              Delete
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- ======= Edit todo  ======= -->
+    {% include 'partials/edit_todo.html' %}
+  </div>
+  <!-- end todo card  -->
+  {% endif %}
+  <!-- divider  -->
+  {% endfor %}
+  <!-- end todo card  -->
+</div>
+
+<!-- Add todo Modal -->
+<div
+  class="modal fade"
+  id="todoModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Todo</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" autocomplete="off">
+          {% csrf_token%}
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="floatingInput"
+              placeholder="Title"
+              name="Title"
+            />
+            <label for="floatingInput">Title</label>
+          </div>
+          <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label"
+              >Todo</label
+            >
+            <textarea
+              class="form-control"
+              id="exampleFormControlTextarea1"
+              rows="5"
+              name="todo"
+            ></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Due Date</label>
+            <input
+              type="date"
+              class="form-control"
+              id="dueDate"
+              name="dueDate"
+              aria-describedby="Due date help"
+            />
+          </div>
+          <center>
+            <button
+              type="submit"
+              class="btn btn_submit my-5"
+              name="submit_todo"
+            >
+              submit todo
+            </button>
+          </center>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

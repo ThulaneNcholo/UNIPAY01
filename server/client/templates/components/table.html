@@ -1,0 +1,92 @@
+<!-- divider  -->
+{% load custom_filters %}
+
+<style>
+  /* Table style  */
+
+  .table_headings {
+    color: grey;
+    font-size: 18px;
+  }
+
+  .table_line {
+    color: lightgray;
+  }
+
+  .btn_action {
+    background-color: var(--primary_color);
+    color: white;
+    border-radius: 15px;
+  }
+
+  .table_action {
+    color: var(--primary_color);
+    font-size: 22px;
+  }
+
+  .new_invoice_btn {
+    background-color: var(--primary_color);
+    color: var(--background_color);
+    width: 100%;
+    border-radius: 15px;
+  }
+
+  .add_invoice_icon {
+    font-size: 22px;
+    margin-right: 20px;
+  }
+
+  .search_container {
+    background-color: var(--background_color);
+    border: 0px;
+    border-bottom-left-radius: 15px;
+    border-top-left-radius: 15px;
+  }
+
+  .search_bar {
+    background-color: var(--background_color);
+    border: 0px;
+    border-bottom-right-radius: 15px;
+    border-top-right-radius: 15px;
+  }
+
+  .sort_filter {
+    background-color: var(--background_color);
+    border: 0px;
+    border-radius: 15px;
+  }
+
+  .category_btn_add {
+    width: 100%;
+    border-radius: 15px;
+  }
+
+  .btn_submit_category {
+    width: 100%;
+    border-radius: 15px;
+    padding: 1rem 0.75rem;
+  }
+</style>
+
+<h1>Table</h1>
+
+<div class="table_display">
+  <div class="row">
+    {% for heading in headings %}
+    <div class="col">
+      <p>{{ heading }}</p>
+    </div>
+    {% endfor %}
+  </div>
+  <!-- end headings  -->
+
+  {% for item in items %}
+  <div class="row">
+    {% for field_name in fields %}
+    <div class="col">
+      <p>{{ item|get_field_value:field_name }}</p>
+    </div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+</div>

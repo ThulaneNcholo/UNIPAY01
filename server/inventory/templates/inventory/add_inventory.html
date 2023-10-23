@@ -1,0 +1,251 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+{% block content %}
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+
+  
+
+  .btn_new_category {
+    border-radius: 15px;
+    background-color: var(--primary_color);
+    color: var(--background_color);
+    padding: 1rem 0.75rem;
+    font-weight: 700;
+  }
+
+  .auto_label {
+    color: var(--primary_color);
+    font-weight: bold;
+  }
+</style>
+
+<form method="POST">
+  {% csrf_token %}
+
+  <div class="row">
+    <div class="col-8">
+      <div class="card_container shadow-sm px-3 py-4">
+        <h5 class="fw-bold mb-5">Add Inventory</h5>
+        <!-- Referance  -->
+        <div class="row">
+          <div class="col-6" id="targetDiv">
+            <div class="form-floating">
+              <input
+                type="text"
+                class="form-control"
+                id="floatingInput"
+                placeholder="Item Reference"
+                name="Referrance"
+                value="{{ref}}"
+              />
+              <label for="floatingInput">Item Reference</label>
+            </div>
+          </div>
+          <div class="col-6">
+            <select
+              class="form-select select_padding"
+              aria-label="Default select example"
+              name="category"
+            >
+              <option selected value="none">select category</option>
+              {% for data in categories %}
+              <option value="{{data.id}}">{{data.name}}</option>
+              {% empty %}
+              <option>N0 categories created</option>
+              {% endfor%}
+            </select>
+          </div>
+        </div>
+        <div id="passwordHelpBlock" class="form-text mb-4">
+          You can edit item reference code
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+            <div class="form-floating mb-4">
+              <input
+                type="text"
+                class="form-control"
+                id="floatingInput"
+                placeholder="Item Name"
+                name="itemName"
+              />
+              <label for="floatingInput">Item Name</label>
+            </div>
+          </div>
+          <!-- end form item  -->
+          <div class="col-6">
+            <div class="form-floating mb-4">
+              <input
+                type="number"
+                class="form-control"
+                id="floatingInput"
+                placeholder="Unit Price"
+                name="UnitPrice"
+              />
+              <label for="floatingInput">Unit Price</label>
+            </div>
+          </div>
+          <!-- end form item  -->
+          <div class="col-6">
+            <div class="form-floating mb-4">
+              <input
+                type="number"
+                class="form-control"
+                id="floatingInput"
+                placeholder="Selling Price"
+                name="SellingPrice"
+              />
+              <label for="floatingInput">Selling Price</label>
+            </div>
+          </div>
+          <!-- end form item  -->
+          <div class="col-6">
+            <div class="form-floating mb-4">
+              <input
+                type="number"
+                class="form-control"
+                id="floatingInput"
+                placeholder="Restock Level"
+                name="lowStock"
+              />
+              <label for="floatingInput">Restock Level</label>
+            </div>
+          </div>
+          <!-- end form item  -->
+          <div class="col-12">
+            <div class="mb-4">
+              <label for="exampleFormControlTextarea1" class="form-label"
+                >Item description</label
+              >
+              <textarea
+                class="form-control text-secondary"
+                id="exampleFormControlTextarea1"
+                rows="5"
+                name="description"
+              >
+Write description here</textarea
+              >
+            </div>
+          </div>
+          <!-- end form item  -->
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card_container shadow-sm px-3 py-4">
+        <h5 class="fw-bold mb-5">Quantity</h5>
+        <div class="row mb-5">
+          <div class="col">
+            <button type="button" class="btn btn_fill" onclick="singleQtybtn()">
+              Single entry
+            </button>
+          </div>
+          <div class="col">
+            <button
+              type="button"
+              class="btn btn-outline-dark outline_btn"
+              onclick="bulkQtybtn()"
+            >
+              Bulk entry
+            </button>
+          </div>
+        </div>
+
+        <div id="singleqty">
+          <div class="form-floating mb-4">
+            <input
+              type="number"
+              class="form-control"
+              id="floatingInput"
+              placeholder="Quantity"
+              name="Quantity"
+            />
+            <label for="floatingInput">Quantity</label>
+          </div>
+          <div id="passwordHelpBlock" class="form-text mt-4">
+            Use this for entering individual item quantities
+          </div>
+        </div>
+
+        <!-- bulk quantity  -->
+        <div id="bulkQty" style="display: none">
+          <div class="form-floating mb-4">
+            <input
+              type="number"
+              class="form-control mb-3"
+              id="floatingInput"
+              placeholder="Quantity in one box"
+              name="bulkQuantity"
+            />
+            <label for="floatingInput">Quantity in one box</label>
+          </div>
+          <div class="form-floating mb-4">
+            <input
+              type="number"
+              class="form-control mb-3"
+              id="floatingInput"
+              placeholder="How many boxs"
+              name="boxQty"
+            />
+            <label for="floatingInput">How many boxs</label>
+          </div>
+
+          <div id="passwordHelpBlock" class="form-text mt-4">
+            Use for counting items in containers, simplifying bulk inventory
+            management.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- bulk type input  -->
+  <input type="text" name="qty_type" id="qty" value="single" hidden="true" />
+
+  <center>
+    <button class="btn btn_submit py-3 my-5" type="submit" name="add_inventory">
+      submit item
+    </button>
+  </center>
+</form>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Get a reference to the checkbox and the target div
+    const checkbox = document.getElementById("flexCheckDefault");
+    const targetDiv = document.getElementById("targetDiv");
+
+    // Add an event listener to the checkbox
+    checkbox.addEventListener("change", function () {
+      // Check if the checkbox is checked
+      if (checkbox.checked) {
+        // If checked, show the target div
+        targetDiv.style.display = "none";
+      } else {
+        // If unchecked, hide the target div
+        targetDiv.style.display = "block";
+      }
+    });
+  });
+
+  function singleQtybtn() {
+    document.getElementById("singleqty").style.display = "block";
+    document.getElementById("bulkQty").style.display = "none";
+    document.getElementById("qty").value = "single";
+  }
+
+  function bulkQtybtn() {
+    document.getElementById("singleqty").style.display = "none";
+    document.getElementById("bulkQty").style.display = "block";
+    document.getElementById("qty").value = "bulk";
+  }
+</script>
+
+{% endblock %}

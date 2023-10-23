@@ -1,0 +1,92 @@
+<div
+  class="offcanvas offcanvas-start"
+  tabindex="-1"
+  id="recurringOffcanvas"
+  aria-labelledby="offcanvasExampleLabel"
+>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasExampleLabel">
+      #{{document.ref}}
+    </h5>
+    <button
+      type="button"
+      class="btn-close text-reset"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body">
+    <form method="POST">
+      {% csrf_token %}
+
+      <select
+        class="form-select mb-4"
+        aria-label="Default select example"
+        name="selectedMonth"
+      >
+        <option selected>Select Months</option>
+        <option value="1">Every month</option>
+        <option value="2">Every 2 months</option>
+        <option value="3">Every 3 months</option>
+        <option value="4">Every 4 months</option>
+        <option value="5">Every 5 months</option>
+        <option value="6">Every 6 months</option>
+        <option value="7">Every 7 months</option>
+        <option value="8">Every 8 months</option>
+        <option value="9">Every 9 months</option>
+        <option value="10">Every 10 months</option>
+        <option value="11">Every 11 months</option>
+        <option value="12">Every year</option>
+      </select>
+      <!-- end months select  -->
+
+      <select
+        class="form-select mb-4"
+        aria-label="Default select example"
+        name="selectedDate"
+      >
+        <option selected>Select Date</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+        <option value="15">15</option>
+        <option value="16">16</option>
+        <option value="17">17</option>
+        <option value="18">18</option>
+        <option value="19">19</option>
+        <option value="20">20</option>
+        <option value="21">21</option>
+        <option value="22">22</option>
+        <option value="23">23</option>
+        <option value="24">24</option>
+        <option value="25">25</option>
+        <option value="26">26</option>
+        <option value="27">27</option>
+        <option value="28">28</option>
+      </select>
+      <!-- end day select  -->
+
+      <center>
+        <button
+          class="btn btn_action my-3"
+          style="width: 100%"
+          type="submit"
+          name="submit_recurring"
+        >
+          submit
+        </button>
+      </center>
+    </form>
+  </div>
+</div>

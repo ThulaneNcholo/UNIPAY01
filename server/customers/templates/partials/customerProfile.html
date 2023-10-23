@@ -1,0 +1,308 @@
+<!-- ======= Account Profile  ======= -->
+<div class="row mb-5">
+  <div class="col">
+    <div class="card_container px-3 py-4 shadow-sm account_colums">
+      <h5 class="mb-4 fw-bold">Profile</h5>
+      <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-person-circle account_icon"></i>
+        <div>
+          <p class="account_label mb-0">Name</p>
+          <p class="mb-0 fw-bold">{{client.firstName}} {{client.lastName}}</p>
+        </div>
+      </div>
+      <!-- end profile item  -->
+      <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-telephone-fill account_icon"></i>
+        <div>
+          <p class="account_label mb-0">Phone</p>
+          <p class="mb-0 fw-bold">{{client.phone}}</p>
+        </div>
+      </div>
+      <!-- end profile item  -->
+      <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-envelope-at-fill account_icon"></i>
+        <div>
+          <p class="account_label mb-0">Email</p>
+          <p class="mb-0 fw-bold">{{client.phone}}</p>
+        </div>
+      </div>
+      <!-- end profile item  -->
+      <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-calendar-check-fill account_icon"></i>
+        <div>
+          <p class="account_label mb-0">Date created</p>
+          <p class="mb-0 fw-bold">{{client.date_created}}</p>
+        </div>
+      </div>
+      <!-- end profile item  -->
+    </div>
+  </div>
+  <div class="col">
+    <div class="card_container px-3 py-4 shadow-sm account_colums">
+      <h5 class="mb-4 fw-bold">Address</h5>
+      <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-geo-alt-fill account_icon"></i>
+        <div>
+          <p class="account_label mb-0">Street</p>
+          <p class="mb-0 fw-bold">{{client.address.street}}</p>
+        </div>
+      </div>
+      <!-- end profile item  -->
+      <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-geo-alt-fill account_icon"></i>
+        <div>
+          <p class="account_label mb-0">Suburb</p>
+          <p class="mb-0 fw-bold">{{client.address.suburb}}</p>
+        </div>
+      </div>
+      <!-- end profile item  -->
+      <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-geo-alt-fill account_icon"></i>
+        <div>
+          <p class="account_label mb-0">City</p>
+          <p class="mb-0 fw-bold">{{client.address.city}}</p>
+        </div>
+      </div>
+      <!-- end profile item  -->
+      <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-geo-alt-fill account_icon"></i>
+        <div>
+          <p class="account_label mb-0">Province</p>
+          <p class="mb-0 fw-bold">{{client.address.province}}</p>
+        </div>
+      </div>
+      <!-- end profile item  -->
+      <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-geo-alt-fill account_icon"></i>
+        <div>
+          <p class="account_label mb-0">PO. BOX</p>
+          <p class="mb-0 fw-bold">{{client.address.pobox}}</p>
+        </div>
+      </div>
+      <!-- end profile item  -->
+    </div>
+  </div>
+  <div class="col">
+    <div class="company_card px-3 py-4 shadow-sm account_colums">
+      <h5 class="mb-4 fw-bold text-white">Company Details</h5>
+      <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-buildings-fill text-white company_icon"></i>
+        <div>
+          <p class="account_label mb-0 text-light">Company Name</p>
+          <p class="mb-0 text-white fw-bold">{{client.company_name}}</p>
+        </div>
+      </div>
+      <!-- end profile item  -->
+      <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-cc-square-fill text-white company_icon"></i>
+        <div>
+          <p class="account_label mb-0 text-light">Company Registred Number</p>
+          <p class="mb-0 text-white fw-bold">
+            {{client.company_registered_number}}
+          </p>
+        </div>
+      </div>
+      <!-- end profile item  -->
+      <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-archive-fill text-white company_icon"></i>
+        <div>
+          <p class="account_label mb-0 text-light">Company Tax</p>
+          <p class="mb-0 text-white fw-bold">{{client.company_tax_number}}</p>
+        </div>
+      </div>
+      <!-- end profile item  -->
+    </div>
+  </div>
+</div>
+
+<!-- ======= Account Bank and Logo  ======= -->
+<div class="row mb-5">
+  <div class="col">
+    <div class="card_container shadow-sm px-3 py-4 col_sizes">
+      <div class="row d-flex align-items-center mb-4">
+        <div class="col">
+          <h5 class="mb-0">Bank Details</h5>
+        </div>
+        <div class="col-3">
+          <button
+            class="btn btn_action"
+            data-bs-toggle="modal"
+            data-bs-target="#customerBank"
+          >
+            <i class="bi bi-gear-fill"></i>
+          </button>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <p class="mb-0 text-secondary">Bank</p>
+        </div>
+        <div class="col">
+          <p class="mb-0">{{client.bank.bankName}}</p>
+        </div>
+      </div>
+      <!-- end item  -->
+      <div class="row mb-3">
+        <div class="col">
+          <p class="mb-0 text-secondary">Branch Code</p>
+        </div>
+        <div class="col">
+          <p class="mb-0">{{client.bank.branch}}</p>
+        </div>
+      </div>
+      <!-- end item  -->
+      <div class="row mb-3">
+        <div class="col">
+          <p class="mb-0 text-secondary">Account Number</p>
+        </div>
+        <div class="col">
+          <p class="mb-0">{{client.bank.account}}</p>
+        </div>
+      </div>
+      <!-- end item  -->
+    </div>
+
+    <!-- Banking details modal -->
+    <div
+      class="modal fade"
+      id="customerBank"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Banking Details</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form method="POST">
+              {% csrf_token%}
+              <div class="form-floating mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="floatingInput"
+                  placeholder="Bank"
+                  name="bank"
+                />
+                <label for="floatingInput">Bank</label>
+              </div>
+              <!-- end input item  -->
+              <div class="form-floating mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="floatingInput"
+                  placeholder="Branch Code"
+                  name="branch"
+                />
+                <label for="floatingInput">Branch Code</label>
+              </div>
+              <!-- end input item   -->
+              <div class="form-floating mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="floatingInput"
+                  placeholder="Account number"
+                  name="account"
+                />
+                <label for="floatingInput">Account number</label>
+              </div>
+              <!-- end input item  -->
+              <center>
+                <button
+                  type="submit"
+                  name="submit_bank"
+                  class="btn btn_submit my-5 py-3"
+                >
+                  Submit Address
+                </button>
+              </center>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card_container shadow-sm px-3 py-4 col_sizes">
+      <div class="row d-flex align-items-center mb-4">
+        <div class="col">
+          <h5 class="mb-0">Company Logo</h5>
+        </div>
+        <div class="col-3">
+          <button
+            class="btn btn_action"
+            data-bs-toggle="modal"
+            data-bs-target="#clientlogo"
+          >
+            <i class="bi bi-gear-fill"></i>
+          </button>
+        </div>
+      </div>
+      <center>
+        {% if client.logo %}
+        <img src="{{client.logo.url}}" alt="" class="client_logo" />
+        {% else %}
+        <p>No logo Uploaded</p>
+        {% endif %}
+      </center>
+    </div>
+
+    <!--Customer Logo Modal -->
+    <div
+      class="modal fade"
+      id="clientlogo"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Client Logo</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body py-5">
+            <form method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="input-group mb-3">
+                <input
+                  type="file"
+                  class="form-control"
+                  id="inputGroupFile02"
+                  name="client_logo"
+                />
+                <label class="input-group-text" for="inputGroupFile02"
+                  >Upload</label
+                >
+              </div>
+              <center>
+                <button
+                  type="submit"
+                  name="submit_logo"
+                  class="btn btn_submit my-5 py-3"
+                >
+                  Submit Logo
+                </button>
+              </center>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

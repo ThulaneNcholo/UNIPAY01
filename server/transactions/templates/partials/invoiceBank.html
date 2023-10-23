@@ -1,0 +1,57 @@
+<div class="col-6">
+  <input
+    type="text"
+    value="{{bankValue}}"
+    name="bankValueInput"
+    hidden="true"
+  />
+  <div class="row d-flex align-items-center mb-3">
+    <div class="col-3">
+      <p class="invoice_labels">Bank</p>
+    </div>
+    <div class="col">
+      <input type="text" value="{{bankData.id}}" name="bankInputData" hidden="true">
+      <input
+        type="text"
+        class="form-control input_style"
+        aria-describedby="Business bank"
+        placeholder="FNB"
+        name="bank"
+        value="{{bankData.bankName}}"
+      />
+    </div>
+  </div>
+  <!-- end address input  -->
+  <div class="row d-flex align-items-center mb-3">
+    <div class="col-3">
+      <p class="invoice_labels">Branch code</p>
+    </div>
+    <div class="col">
+      <input
+        type="text"
+        class="form-control input_style"
+        aria-describedby="Business Branch code"
+        placeholder="250655"
+        name="branch"
+        value="{{bankData.branch}}"
+      />
+    </div>
+  </div>
+  <!-- end address input  -->
+  <div class="row d-flex align-items-center mb-3">
+    <div class="col-3">
+      <p class="invoice_labels">Account Number</p>
+    </div>
+    <div class="col">
+      <input
+        type="text"
+        class="form-control input_style"
+        aria-describedby="Business Account Number"
+        placeholder="53536*****653"
+        name="accountNumber"
+        value="{{bankData.account}}"
+      />
+    </div>
+  </div>
+  <!-- end address input  -->
+</div>

@@ -1,0 +1,274 @@
+{% extends 'client/base.html' %}
+<!-- divider  -->
+{% load static %}
+<!-- divider  -->
+{% block content %}
+
+<style>
+  :root {
+    --primary_color: #6470ef;
+    --background_color: #ebecfd;
+  }
+
+  .icon_style {
+    font-size: 23px;
+    color: white;
+  }
+
+  .widget_heading {
+    font-size: 17px;
+    color: grey;
+  }
+
+  .company_card {
+    background-color: var(--primary_color);
+    border-radius: 15px;
+  }
+
+  .circle {
+    width: 50px; /* Set the desired width and height for the circle */
+    height: 50px;
+    background-color: var(
+      --primary_color
+    ); /* Set the circle background color */
+    border-radius: 50%; /* Make it a circle by setting border-radius to 50% */
+    display: flex;
+    justify-content: center; /* Center the icon horizontally */
+    align-items: center; /* Center the icon vertically */
+    margin-right: 15px;
+  }
+
+  .main_component_card {
+    background-color: var(--primary_color) !important;
+  }
+
+  .main_component_circle {
+    background-color: var(--background_color) !important;
+  }
+
+  .main_component_icon {
+    color: var(--primary_color) !important;
+  }
+
+  /* Table style  */
+  .table_heading_style {
+    background-color: var(--primary_color);
+    border-radius: 12px;
+  }
+
+  .view_icon {
+    color: var(--primary_color);
+  }
+
+  .view_icon:hover {
+    cursor: pointer;
+    color: black;
+  }
+</style>
+
+<div class="px-3 py-4">
+  <p class="mb-1">Hello Jamal</p>
+  <h2 class="fw-bold">Dashboard</h2>
+
+  <!-- ======= Hero components  ======= -->
+  <div class="row my-5">
+    <div class="col">
+      <div
+        class="card_container shadow-sm d-flex align-items-center px-3 py-4 main_component_card"
+      >
+        <div class="circle main_component_circle">
+          <i class="bi bi-receipt icon_style main_component_icon"></i>
+        </div>
+        <div>
+          <h5 class="mb-1 widget_heading text-light">Total Sales</h5>
+          <h5 class="mb-0 fw-bold text-light">R {{total_sales}}</h5>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card_container shadow-sm d-flex align-items-center px-3 py-4">
+        <div class="circle">
+          <i class="bi bi-cloud-download-fill icon_style"></i>
+        </div>
+        <div>
+          <h5 class="mb-1 widget_heading">Total Qoutes</h5>
+          <h5 class="mb-0 fw-bold">{{qoutesCount}}</h5>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card_container shadow-sm d-flex align-items-center px-3 py-4">
+        <div class="circle">
+          <i class="bi bi-people-fill icon_style"></i>
+        </div>
+        <div>
+          <h5 class="mb-1 widget_heading">Clients</h5>
+          <h5 class="mb-0 fw-bold">{{clientsCount}}</h5>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card_container shadow-sm d-flex align-items-center px-3 py-4">
+        <div class="circle">
+          <i class="bi bi-graph-down-arrow icon_style"></i>
+        </div>
+        <div>
+          <h5 class="mb-1 widget_heading">Low Stock</h5>
+          <h5 class="mb-0 fw-bold text-danger">{{lowStock}}</h5>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card_container shadow-sm d-flex align-items-center px-3 py-4">
+        <div class="circle">
+          <i class="bi bi-exclamation-circle-fill icon_style"></i>
+        </div>
+        <div>
+          <h5 class="mb-1 widget_heading">Out Stock</h5>
+          <h5 class="mb-0 fw-bold text-danger">{{outStock}}</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= Bar charts Partials  ======= -->
+  <div class="row mb-5">
+    <div class="col-6 mb-3">
+      <!-- earnings bar chart  -->
+      {% include 'partials/earning.html' %}
+    </div>
+    <div class="col-6 mb-3">
+      <!-- Top Products  -->
+      {% include 'partials/topProducts.html' %}
+    </div>
+    <div class="col-6 mb-3">
+      <!-- Expenses vs Income  -->
+      {% include 'partials/expenses.html' %}
+    </div>
+    <div class="col-6 mb-3">
+      <!-- Clients onboard  -->
+      {% include 'partials/customer_linechart.html' %}
+    </div>
+  </div>
+
+  <!-- ======= Hero components  ======= -->
+  <div class="row">
+    <div class="col-6 mb-5">
+      <div class="card_container shadow-sm px-3 py-4 col_sizes">
+        <h5 class="fw-bold mb-3">Pending Qoutes</h5>
+        <!-- table heading start  -->
+        <div class="row py-2 mx-0 mb-3">
+          <div class="col">
+            <h6 class="text-secondary mb-0">#</h6>
+          </div>
+          <div class="col">
+            <h6 class="text-secondary mb-0">Name</h6>
+          </div>
+          <div class="col">
+            <h6 class="text-secondary mb-0">Due</h6>
+          </div>
+          <div class="col">
+            <h6 class="text-secondary mb-0">Amount</h6>
+          </div>
+          <div class="col-1"></div>
+        </div>
+
+        {% for data in qoutes %}
+        <div class="row py-2 mx-0">
+          <div class="col">
+            <p class="mb-0">{{data.ref}}</p>
+          </div>
+          <div class="col">
+            <p class="mb-0">{{data.customer.company_name}}</p>
+          </div>
+          <div class="col">
+            <p class="mb-0">{{data.dueDate}}</p>
+          </div>
+          <div class="col">
+            <p class="mb-0 fw-bold">R{{data.income}}</p>
+          </div>
+          <div class="col-1">
+            <a href="{% url 'view-document' data.id 2 %}">
+              <i class="bi bi-arrow-right-circle-fill view_icon"></i>
+            </a>
+          </div>
+        </div>
+        <hr class="mb-3" />
+        {% endfor %}
+      </div>
+    </div>
+    <!-- end table card  -->
+
+    <div class="col-6 mb-5">
+      <div class="card_container shadow-sm px-3 py-4 col_sizes">
+        <h5 class="fw-bold mb-3">Open Invoices</h5>
+        <!-- table heading start  -->
+        <div class="row py-2 mx-0 mb-3">
+          <div class="col">
+            <h6 class="text-secondary mb-0">#</h6>
+          </div>
+          <div class="col">
+            <h6 class="text-secondary mb-0">Paid</h6>
+          </div>
+          <div class="col">
+            <h6 class="text-secondary mb-0">Outstanding</h6>
+          </div>
+          <div class="col">
+            <h6 class="text-secondary mb-0">Due Date</h6>
+          </div>
+          <div class="col-1"></div>
+        </div>
+
+        {% for data in openInvoices %}
+        <div class="row py-2 mx-0">
+          <div class="col">
+            <p class="mb-0 text-secondary">#{{data.ref}}</p>
+            <p class="mb-0" style="font-size: 14px">
+              {{data.customer.company_name}}
+            </p>
+          </div>
+          <div class="col">
+            {% if data.amountPaid != None%}
+            <p class="mb-0">R{{data.amountPaid}}</p>
+            {% else %}
+            <p class="mb-0">R0</p>
+            {% endif %}
+          </div>
+          <div class="col">
+            {% if data.outstandingBalance != None%}
+            <p class="mb-0">R{{data.outstandingBalance}}</p>
+            {% else %}
+            <p class="mb-0">R0</p>
+            {% endif %}
+          </div>
+          <div class="col">
+            {% if data.dueDate != None%}
+            <p class="mb-0">{{data.dueDate}}</p>
+            {% else %}
+            <p class="mb-0">-</p>
+            {% endif %}
+          </div>
+          <div class="col-1">
+            <a href="{% url 'view-document' data.id 1%}">
+              <i class="bi bi-arrow-right-circle-fill view_icon"></i>
+            </a>
+          </div>
+        </div>
+        <hr class="mb-3" />
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- todo list card  -->
+    <div class="col-6 mb-5">{% include 'partials/todoList.html' %}</div>
+    <!-- todo list card  -->
+    <div class="col-6 mb-5">
+      {% include 'partials/recurring_invoices.html' %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
